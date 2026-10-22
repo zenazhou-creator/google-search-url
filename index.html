@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Google Search URL Generator</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        purplebg: '#f5f3ff',
+                        glassbg: 'rgba(255, 255, 255, 0.75)',
+                        purpleaccent: '#7c3aed',
+                        purpleaccenthover: '#6d28d9',
+                        textmain: '#1e1b4b',
+                        textmuted: '#4c1d95',
+                    },
+                    boxShadow: {
+                        'soft-glass': '0 8px 30px rgba(124, 58, 237, 0.08)',
+                        'purple-glow': '0 4px 14px rgba(124, 58, 237, 0.25)',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background: linear-gradient(135deg, #f5f3ff 0%, #ede9fe 50%, #f3e8ff 100%);
+            min-height: 100vh;
+            color: #1e1b4b;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.75);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(196, 181, 253, 0.5);
+            box-shadow: 0 4px 20px rgba(124, 58, 237, 0.05);
+        }
+        .glass-input {
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid rgba(167, 139, 250, 0.4);
+            color: #1e1b4b;
+            transition: all 0.2s ease;
+        }
+        .glass-input:focus {
+            border-color: #7c3aed;
+            box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.15);
+            outline: none;
+        }
+
+        /* Visited Row Styling */
+        tr.row-visited {
+            background-color: rgba(237, 233, 254, 0.4) !important;
+            opacity: 0.75;
+        }
+        tr.row-visited td {
+            color: #6b21a8;
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: rgba(237, 233, 254, 0.5);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(167, 139, 250, 0.6);
+            border-radius: 3px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(124, 58, 237, 0.8);
+        }
+    </style>
+</head>
+<body class="font-sans antialiased text-xs md:text-sm p-3 md:p-6">
+
+    <div class="max-w-7xl mx-auto space-y-4">
+        
+        <!-- Compact Header -->
+        <header class="glass-card px-4 py-2.5 rounded-xl flex items-center justify-between border border-purple-200">
+            <div class="flex items-center space-x-2.5">
+                <div class="w-8 h-8 rounded-lg bg-purple-600 text-white flex items-center justify-center shadow-purple-glow">
+                    <i class="fa-solid fa-magnifying-glass-location text-sm"></i>
+                </div>
+                <div>
+                    <h1 class="text-base font-bold text-indigo-950 leading-tight">Google Search URL Generator</h1>
+                    <p class="text-[11px] text-purple-700">Multi-Region & SEO URL Suite &bull; Automatische Kopierfunktion</p>
+                </div>
+            </div>
+
+            <div class="flex items-center space-x-2">
+                <span id="summaryBadge" class="px-2.5 py-1 bg-purple-100 text-purple-800 rounded-lg text-xs font-semibold border border-purple-200">
+                    0 Begriffe
+                </span>
+            </div>
+        </header>
+
+        <!-- Notification Toast -->
+        <div id="toast" class="fixed top-4 right-4 z-50 transform -translate-y-12 opacity-0 transition-all duration-300 pointer-events-none">
+            <div class="bg-indigo-950 text-white px-4 py-2.5 rounded-xl shadow-xl flex items-center space-x-2 text-xs font-medium">
+                <i id="toastIcon" class="fa-solid fa-circle-check text-emerald-400"></i>
+                <span id="toastMessage">In Zwischenablage kopiert</span>
+            </div>
+        </div>
+
+        <!-- Controls Section: Grid Layout -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-4">
+            
+            <!-- Left Area: Batch Input -->
+            <div class="lg:col-span-5 flex flex-col space-y-3">
+                <div class="glass-card p-3.5 rounded-xl flex-1 flex flex-col space-y-2">
+                    <div class="flex justify-between items-center">
+                        <label for="keywordInput" class="font-semibold text-indigo-950 flex items-center gap-1.5 text-xs">
+                            <i class="fa-solid fa-list-ul text-purple-600"></i>
+                            Suchbegriffe (1 pro Zeile)
+                        </label>
+                        <div class="space-x-1">
+                            <button id="loadDemoBtn" class="text-[11px] px-2 py-0.5 rounded bg-purple-100 text-purple-700 hover:bg-purple-200 transition">Demo</button>
+                            <button id="clearKeywordsBtn" class="text-[11px] px-2 py-0.5 rounded bg-slate-100 text-slate-600 hover:bg-slate-200 transition">Leeren</button>
+                        </div>
+                    </div>
+                    
+                    <textarea 
+                        id="keywordInput" 
+                        rows="7" 
+                        class="w-full glass-input rounded-lg p-2.5 text-xs font-mono resize-none flex-1" 
+                        placeholder="ki werbung beispiele&#10;seo tipps 2026&#10;content marketing strategie"
+                    >ki werbung beispiele
+seo tipps 2026</textarea>
+                </div>
+            </div>
+
+            <!-- Right Area: Parameters & Filters -->
+            <div class="lg:col-span-7 space-y-3">
+                <div class="glass-card p-3.5 rounded-xl space-y-3">
+                    
+                    <!-- Region Presets -->
+                    <div>
+                        <label class="block text-[11px] font-semibold text-indigo-950 mb-1 flex items-center gap-1">
+                            <i class="fa-solid fa-earth-europe text-purple-600"></i> Region / Sprache Preset
+                        </label>
+                        <div class="grid grid-cols-2 sm:grid-cols-4 gap-1.5">
+                            <select id="presetSelect" class="col-span-2 sm:col-span-3 glass-input rounded-lg p-1.5 text-xs font-medium cursor-pointer">
+                                <optgroup label="DACH-Raum">
+                                    <option value="de|de" selected>Deutschland (DE / de)</option>
+                                    <option value="de|at">Österreich (AT / de)</option>
+                                    <option value="de|ch">Schweiz (CH / de)</option>
+                                </optgroup>
+                                <optgroup label="Europa">
+                                    <option value="es|es">Spanien (ES / es)</option>
+                                    <option value="fr|fr">Frankreich (FR / fr)</option>
+                                    <option value="it|it">Italien (IT / it)</option>
+                                    <option value="en|gb">Großbritannien (UK / en)</option>
+                                </optgroup>
+                                <optgroup label="Global">
+                                    <option value="en|us">USA (US / en)</option>
+                                    <option value="zh-CN|cn">China (CN / zh-CN)</option>
+                                    <option value="zh-TW|tw">Taiwan (TW / zh-TW)</option>
+                                    <option value="ja|jp">Japan (JP / ja)</option>
+                                </optgroup>
+                                <option value="custom">Benutzerdefiniert...</option>
+                            </select>
+
+                            <!-- Custom Inline Inputs -->
+                            <div class="flex items-center space-x-1">
+                                <input type="text" id="hlInput" value="de" placeholder="hl" class="w-1/2 glass-input rounded-lg p-1.5 text-xs text-center font-mono">
+                                <input type="text" id="glInput" value="de" placeholder="gl" class="w-1/2 glass-input rounded-lg p-1.5 text-xs text-center font-mono">
+                            </div>
+                        </div>
+                    </div>
+
+                    <hr class="border-purple-200/60">
+
+                    <!-- Compact SEO Operators Bar -->
+                    <div class="space-y-2">
+                        <label class="block text-[11px] font-semibold text-indigo-950 flex items-center gap-1">
+                            <i class="fa-solid fa-sliders text-purple-600"></i> SEO Filter & Operatoren
+                        </label>
+                        
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                            <!-- Toggle Exact -->
+                            <label class="flex items-center space-x-2 bg-white/60 p-1.5 rounded-lg border border-purple-200/60 cursor-pointer">
+                                <input type="checkbox" id="exactMatch" class="w-3.5 h-3.5 rounded text-purple-600 focus:ring-purple-500">
+                                <span class="text-xs font-medium text-indigo-950">Exakt <code class="text-purple-700 font-bold">"..."</code></span>
+                            </label>
+
+                            <!-- Site Filter -->
+                            <div class="flex items-center space-x-1 bg-white/60 p-1.5 rounded-lg border border-purple-200/60">
+                                <input type="checkbox" id="siteToggle" class="w-3.5 h-3.5 rounded text-purple-600 focus:ring-purple-500">
+                                <span class="text-xs font-medium text-indigo-950 min-w-[28px]">site:</span>
+                                <input type="text" id="siteVal" placeholder="z.B. youtube.com" disabled class="w-full glass-input rounded px-1.5 py-0.5 text-[11px] font-mono disabled:opacity-40">
+                            </div>
+
+                            <!-- Filetype Filter -->
+                            <div class="flex items-center space-x-1 bg-white/60 p-1.5 rounded-lg border border-purple-200/60">
+                                <input type="checkbox" id="filetypeToggle" class="w-3.5 h-3.5 rounded text-purple-600 focus:ring-purple-500">
+                                <span class="text-xs font-medium text-indigo-950 min-w-[38px]">file:</span>
+                                <input type="text" id="filetypeVal" value="pdf" disabled class="w-full glass-input rounded px-1.5 py-0.5 text-[11px] font-mono disabled:opacity-40">
+                            </div>
+
+                            <!-- InURL Filter -->
+                            <div class="flex items-center space-x-1 bg-white/60 p-1.5 rounded-lg border border-purple-200/60">
+                                <input type="checkbox" id="inurlToggle" class="w-3.5 h-3.5 rounded text-purple-600 focus:ring-purple-500">
+                                <span class="text-xs font-medium text-indigo-950 min-w-[38px]">inurl:</span>
+                                <input type="text" id="inurlVal" placeholder="blog..." disabled class="w-full glass-input rounded px-1.5 py-0.5 text-[11px] font-mono disabled:opacity-40">
+                            </div>
+
+                            <!-- Intitle Filter -->
+                            <div class="flex items-center space-x-1 bg-white/60 p-1.5 rounded-lg border border-purple-200/60">
+                                <input type="checkbox" id="intitleToggle" class="w-3.5 h-3.5 rounded text-purple-600 focus:ring-purple-500">
+                                <span class="text-xs font-medium text-indigo-950 min-w-[38px]">title:</span>
+                                <input type="text" id="intitleVal" placeholder="guide..." disabled class="w-full glass-input rounded px-1.5 py-0.5 text-[11px] font-mono disabled:opacity-40">
+                            </div>
+
+                            <!-- Time Filter -->
+                            <div class="flex items-center space-x-1 bg-white/60 p-1.5 rounded-lg border border-purple-200/60">
+                                <span class="text-xs font-medium text-indigo-950 min-w-[28px]"><i class="fa-regular fa-clock text-purple-600"></i></span>
+                                <select id="timeFilter" class="w-full glass-input rounded px-1 py-0.5 text-[11px] cursor-pointer">
+                                    <option value="">Zeitraum: Alle</option>
+                                    <option value="qdr:d">24 Std. (qdr:d)</option>
+                                    <option value="qdr:w">1 Woche (qdr:w)</option>
+                                    <option value="qdr:m">1 Monat (qdr:m)</option>
+                                    <option value="qdr:y">1 Jahr (qdr:y)</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Main Results Area: Direct Table View -->
+        <div class="glass-card p-4 rounded-xl space-y-3">
+            
+            <!-- Table Action Toolbar -->
+            <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 pb-2 border-b border-purple-200/60">
+                <div class="flex items-center space-x-1 bg-purple-100/70 p-1 rounded-lg border border-purple-200">
+                    <button id="filterAllBtn" class="px-2.5 py-1 text-xs font-medium rounded-md bg-white text-purple-900 shadow-sm">Alle</button>
+                    <button id="filterUnvisitedBtn" class="px-2.5 py-1 text-xs font-medium rounded-md text-purple-700 hover:bg-white/50">Offen</button>
+                    <button id="filterVisitedBtn" class="px-2.5 py-1 text-xs font-medium rounded-md text-purple-700 hover:bg-white/50">Geöffnet</button>
+                </div>
+
+                <div class="flex items-center gap-2 w-full sm:w-auto justify-end">
+                    <input type="text" id="tableSearch" placeholder="Tabelle durchsuchen..." class="glass-input rounded-lg px-2.5 py-1 text-xs w-36 sm:w-48">
+                    
+                    <button id="exportCsvBtn" class="px-2.5 py-1 rounded-lg bg-white hover:bg-purple-50 text-indigo-900 border border-purple-200 text-xs font-medium transition flex items-center gap-1">
+                        <i class="fa-solid fa-file-csv text-purple-600"></i> Export
+                    </button>
+                    
+                    <button id="resetVisitedBtn" class="px-2.5 py-1 rounded-lg bg-white hover:bg-purple-50 text-slate-700 border border-purple-200 text-xs font-medium transition flex items-center gap-1" title="Klick-Status zurücksetzen">
+                        <i class="fa-solid fa-rotate-left text-slate-500"></i> Reset
+                    </button>
+                </div>
+            </div>
+
+            <!-- Table Container -->
+            <div class="overflow-x-auto max-h-[480px] overflow-y-auto rounded-lg border border-purple-200/80 bg-white/80">
+                <table class="w-full text-left border-collapse">
+                    <thead class="bg-purple-100/90 sticky top-0 z-10 text-[11px] font-bold text-indigo-950 uppercase border-b border-purple-200">
+                        <tr>
+                            <th class="py-2 px-3 w-12 text-center">#</th>
+                            <th class="py-2 px-3 w-28">Status</th>
+                            <th class="py-2 px-3">Keyword & Query</th>
+                            <th class="py-2 px-3 w-20 text-center">Target</th>
+                            <th class="py-2 px-3">Google Search URL (Klick = Kopieren)</th>
+                            <th class="py-2 px-3 w-24 text-center">Aktion</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tableBody" class="divide-y divide-purple-100 text-xs">
+                        <!-- Dynamic Rows Here -->
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="text-[11px] text-slate-500 flex justify-between items-center px-1">
+                <span><i class="fa-solid fa-circle-info text-purple-500"></i> Hinweistext: Beim Klicken auf <b>"Öffnen"</b> wird die URL direkt in ein neues Tab geöffnet und gleichzeitig kopiert.</span>
+                <span id="visitedCounterText" class="font-medium text-purple-900">0 / 0 geöffnet</span>
+            </div>
+
+        </div>
+
+        <!-- Local History Footer -->
+        <div class="glass-card p-3 rounded-xl flex items-center justify-between text-xs">
+            <div class="flex items-center space-x-2 overflow-x-auto py-0.5">
+                <span class="font-semibold text-indigo-950 shrink-0"><i class="fa-solid fa-history text-purple-600"></i> Verlauf:</span>
+                <div id="historyList" class="flex items-center space-x-1.5">
+                    <span class="text-slate-400 italic text-[11px]">Kein Verlauf vorhanden</span>
+                </div>
+            </div>
+            <button id="clearHistoryBtn" class="text-[11px] text-slate-400 hover:text-purple-700 shrink-0 ml-2">Löschen</button>
+        </div>
+
+    </div>
+
+    <!-- Application Script -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Elements
+            const keywordInput = document.getElementById('keywordInput');
+            const loadDemoBtn = document.getElementById('loadDemoBtn');
+            const clearKeywordsBtn = document.getElementById('clearKeywordsBtn');
+            const summaryBadge = document.getElementById('summaryBadge');
+
+            const presetSelect = document.getElementById('presetSelect');
+            const hlInput = document.getElementById('hlInput');
+            const glInput = document.getElementById('glInput');
+
+            const exactMatch = document.getElementById('exactMatch');
+            const siteToggle = document.getElementById('siteToggle');
+            const siteVal = document.getElementById('siteVal');
+            const filetypeToggle = document.getElementById('filetypeToggle');
+            const filetypeVal = document.getElementById('filetypeVal');
+            const inurlToggle = document.getElementById('inurlToggle');
+            const inurlVal = document.getElementById('inurlVal');
+            const intitleToggle = document.getElementById('intitleToggle');
+            const intitleVal = document.getElementById('intitleVal');
+            const timeFilter = document.getElementById('timeFilter');
+
+            const tableBody = document.getElementById('tableBody');
+            const tableSearch = document.getElementById('tableSearch');
+            const visitedCounterText = document.getElementById('visitedCounterText');
+            const resetVisitedBtn = document.getElementById('resetVisitedBtn');
+            const exportCsvBtn = document.getElementById('exportCsvBtn');
+
+            const filterAllBtn = document.getElementById('filterAllBtn');
+            const filterUnvisitedBtn = document.getElementById('filterUnvisitedBtn');
+            const filterVisitedBtn = document.getElementById('filterVisitedBtn');
+
+            const historyList = document.getElementById('historyList');
+            const clearHistoryBtn = document.getElementById('clearHistoryBtn');
+
+            const toast = document.getElementById('toast');
+            const toastMessage = document.getElementById('toastMessage');
+
+            // State
+            let visitedSet = new Set();
+            let currentData = [];
+            let activeFilter = 'all'; // 'all', 'unvisited', 'visited'
+
+            // Presets
+            presetSelect.addEventListener('change', (e) => {
+                if (e.target.value !== 'custom') {
+                    const [hl, gl] = e.target.value.split('|');
+                    hlInput.value = hl;
+                    glInput.value = gl;
+                }
+                rebuildTable();
+            });
+
+            [hlInput, glInput].forEach(i => i.addEventListener('input', () => {
+                presetSelect.value = 'custom';
+                rebuildTable();
+            }));
+
+            // Toggle Toggles
+            const bindToggle = (toggle, input) => {
+                toggle.addEventListener('change', (e) => {
+                    input.disabled = !e.target.checked;
+                    if (e.target.checked) input.focus();
+                    rebuildTable();
+                });
+                input.addEventListener('input', rebuildTable);
+            };
+
+            bindToggle(siteToggle, siteVal);
+            bindToggle(filetypeToggle, filetypeVal);
+            bindToggle(inurlToggle, inurlVal);
+            bindToggle(intitleToggle, intitleVal);
+
+            [exactMatch, timeFilter, keywordInput].forEach(el => {
+                el.addEventListener('input', rebuildTable);
+                el.addEventListener('change', rebuildTable);
+            });
+
+            tableSearch.addEventListener('input', renderTable);
+
+            // Quick Actions
+            clearKeywordsBtn.addEventListener('click', () => {
+                keywordInput.value = '';
+                rebuildTable();
+            });
+
+            loadDemoBtn.addEventListener('click', () => {
+                keywordInput.value = "ki werbung beispiele\ncorpse bride makeup\ncontent marketing strategy 2026";
+                rebuildTable();
+            });
+
+            resetVisitedBtn.addEventListener('click', () => {
+                visitedSet.clear();
+                renderTable();
+                showToast("Klick-Status zurückgesetzt", "fa-rotate-left");
+            });
+
+            // Status Filter Tabs
+            const setTabActive = (btn) => {
+                [filterAllBtn, filterUnvisitedBtn, filterVisitedBtn].forEach(b => {
+                    b.className = "px-2.5 py-1 text-xs font-medium rounded-md text-purple-700 hover:bg-white/50";
+                });
+                btn.className = "px-2.5 py-1 text-xs font-medium rounded-md bg-white text-purple-900 shadow-sm";
+            };
+
+            filterAllBtn.addEventListener('click', () => { activeFilter = 'all'; setTabActive(filterAllBtn); renderTable(); });
+            filterUnvisitedBtn.addEventListener('click', () => { activeFilter = 'unvisited'; setTabActive(filterUnvisitedBtn); renderTable(); });
+            filterVisitedBtn.addEventListener('click', () => { activeFilter = 'visited'; setTabActive(filterVisitedBtn); renderTable(); });
+
+            // Build Item URL
+            function buildUrlItem(rawKw) {
+                let kw = rawKw.trim();
+                if (!kw) return null;
+
+                let q = kw;
+                if (exactMatch.checked) q = `"${q}"`;
+                if (siteToggle.checked && siteVal.value.trim()) q += ` site:${siteVal.value.trim()}`;
+                if (filetypeToggle.checked && filetypeVal.value.trim()) q += ` filetype:${filetypeVal.value.trim()}`;
+                if (inurlToggle.checked && inurlVal.value.trim()) q += ` inurl:${inurlVal.value.trim()}`;
+                if (intitleToggle.checked && intitleVal.value.trim()) q += ` intitle:${intitleVal.value.trim()}`;
+
+                const params = new URLSearchParams();
+                params.set('q', q);
+
+                const hl = hlInput.value.trim() || 'de';
+                const gl = glInput.value.trim() || 'de';
+                params.set('hl', hl);
+                params.set('gl', gl);
+
+                if (timeFilter.value) params.set('tbs', timeFilter.value);
+
+                return {
+                    keyword: kw,
+                    query: q,
+                    hl: hl,
+                    gl: gl,
+                    url: `https://www.google.com/search?${params.toString()}`
+                };
+            }
+
+            function rebuildTable() {
+                const lines = keywordInput.value.split('\n').map(l => l.trim()).filter(l => l.length > 0);
+                summaryBadge.textContent = `${lines.length} Begriff(e)`;
+
+                currentData = [];
+                lines.forEach(line => {
+                    const item = buildUrlItem(line);
+                    if (item) currentData.push(item);
+                });
+
+                renderTable();
+            }
+
+            function renderTable() {
+                tableBody.innerHTML = '';
+                const searchTerm = tableSearch.value.toLowerCase().trim();
+
+                let displayedCount = 0;
+                let visitedCount = 0;
+
+                currentData.forEach((item, idx) => {
+                    const isVisited = visitedSet.has(item.url);
+                    if (isVisited) visitedCount++;
+
+                    // Filter Logic
+                    if (activeFilter === 'unvisited' && isVisited) return;
+                    if (activeFilter === 'visited' && !isVisited) return;
+
+                    if (searchTerm && !item.keyword.toLowerCase().includes(searchTerm) && !item.url.toLowerCase().includes(searchTerm)) {
+                        return;
+                    }
+
+                    displayedCount++;
+
+                    const tr = document.createElement('tr');
+                    tr.className = `hover:bg-purple-50/80 transition ${isVisited ? 'row-visited' : ''}`;
+
+                    tr.innerHTML = `
+                        <td class="py-2 px-3 font-mono text-slate-400 text-center text-[11px]">${idx + 1}</td>
+                        <td class="py-2 px-3">
+                            ${isVisited ? `
+                                <span class="inline-flex items-center gap-1 text-[10px] bg-emerald-100 text-emerald-800 font-semibold px-2 py-0.5 rounded-full border border-emerald-300">
+                                    <i class="fa-solid fa-check text-[9px]"></i> Geöffnet
+                                </span>
+                            ` : `
+                                <span class="inline-flex items-center gap-1 text-[10px] bg-purple-100 text-purple-700 font-medium px-2 py-0.5 rounded-full border border-purple-200">
+                                    Offen
+                                </span>
+                            `}
+                        </td>
+                        <td class="py-2 px-3 font-medium text-indigo-950">
+                            <div>${escapeHtml(item.keyword)}</div>
+                            ${item.query !== item.keyword ? `<div class="text-[10px] text-purple-600 font-mono">${escapeHtml(item.query)}</div>` : ''}
+                        </td>
+                        <td class="py-2 px-3 text-center">
+                            <span class="bg-slate-100 text-slate-700 font-mono text-[10px] px-1.5 py-0.5 rounded border border-slate-200 uppercase">
+                                ${escapeHtml(item.hl)}-${escapeHtml(item.gl)}
+                            </span>
+                        </td>
+                        <td class="py-2 px-3 font-mono text-[11px] text-purple-700 hover:text-purple-900 cursor-pointer max-w-xs truncate" title="Klicken um URL zu kopieren" onclick="copyText('${escapeHtml(item.url)}')">
+                            <span class="underline decoration-purple-300 underline-offset-2">${escapeHtml(item.url)}</span>
+                        </td>
+                        <td class="py-2 px-3 text-center">
+                            <button onclick="openAndCopy('${escapeHtml(item.url)}', '${escapeHtml(item.keyword)}')" class="px-2.5 py-1 rounded bg-purple-600 hover:bg-purple-700 text-white font-medium text-[11px] transition shadow-sm flex items-center justify-center gap-1 mx-auto">
+                                <span>Öffnen</span>
+                                <i class="fa-solid fa-arrow-up-right-from-square text-[9px]"></i>
+                            </button>
+                        </td>
+                    `;
+
+                    tableBody.appendChild(tr);
+                });
+
+                if (displayedCount === 0) {
+                    tableBody.innerHTML = `
+                        <tr>
+                            <td colspan="6" class="py-8 text-center text-slate-400">
+                                Keine passenden Suchbegriffe oder URLs gefunden.
+                            </td>
+                        </tr>
+                    `;
+                }
+
+                visitedCounterText.textContent = `${visitedCount} / ${currentData.length} geöffnet`;
+            }
+
+            // Copy & Open Actions
+            window.copyText = function(text) {
+                copyToClipboard(text, "URL kopiert!");
+            };
+
+            window.openAndCopy = function(url, keyword) {
+                visitedSet.add(url);
+                saveHistory(keyword);
+                copyToClipboard(url, "URL kopiert & Tab geöffnet!");
+                window.open(url, '_blank');
+                renderTable();
+            };
+
+            function copyToClipboard(text, msg) {
+                const el = document.createElement('textarea');
+                el.value = text;
+                document.body.appendChild(el);
+                el.select();
+                try {
+                    document.execCommand('copy');
+                    showToast(msg);
+                } catch (e) {
+                    showToast("Fehler beim Kopieren", "fa-circle-xmark");
+                }
+                document.body.removeChild(el);
+            }
+
+            function showToast(msg, icon = "fa-circle-check") {
+                toastMessage.textContent = msg;
+                document.getElementById('toastIcon').className = `fa-solid ${icon} text-emerald-400`;
+                toast.classList.remove('-translate-y-12', 'opacity-0');
+                toast.classList.add('translate-y-0', 'opacity-100');
+                
+                setTimeout(() => {
+                    toast.classList.remove('translate-y-0', 'opacity-100');
+                    toast.classList.add('-translate-y-12', 'opacity-0');
+                }, 2200);
+            }
+
+            // Export to CSV
+            exportCsvBtn.addEventListener('click', () => {
+                if (currentData.length === 0) return;
+                let csvContent = "data:text/csv;charset=utf-8,Keyword,Query,HL,GL,URL,Status\n";
+                currentData.forEach(d => {
+                    const status = visitedSet.has(d.url) ? "Geöffnet" : "Offen";
+                    csvContent += `"${d.keyword}","${d.query}","${d.hl}","${d.gl}","${d.url}","${status}"\n`;
+                });
+                const encodedUri = encodeURI(csvContent);
+                const link = document.createElement("a");
+                link.setAttribute("href", encodedUri);
+                link.setAttribute("download", `google_search_urls_${new Date().toISOString().slice(0,10)}.csv`);
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            });
+
+            // Local History
+            function saveHistory(kw) {
+                if (!kw) return;
+                let history = JSON.parse(localStorage.getItem('g_search_hist') || '[]');
+                history = history.filter(h => h.toLowerCase() !== kw.toLowerCase());
+                history.unshift(kw);
+                if (history.length > 8) history = history.slice(0, 8);
+                localStorage.setItem('g_search_hist', JSON.stringify(history));
+                renderHistory();
+            }
+
+            function renderHistory() {
+                const history = JSON.parse(localStorage.getItem('g_search_hist') || '[]');
+                historyList.innerHTML = '';
+                if (history.length === 0) {
+                    historyList.innerHTML = '<span class="text-slate-400 italic text-[11px]">Kein Verlauf vorhanden</span>';
+                    return;
+                }
+                history.forEach(item => {
+                    const btn = document.createElement('button');
+                    btn.className = 'px-2 py-0.5 bg-purple-100 hover:bg-purple-200 text-purple-800 rounded text-[11px] font-mono border border-purple-200 transition';
+                    btn.textContent = item;
+                    btn.onclick = () => {
+                        const val = keywordInput.value.trim();
+                        if (!val) keywordInput.value = item;
+                        else if (!val.split('\n').includes(item)) keywordInput.value += '\n' + item;
+                        rebuildTable();
+                    };
+                    historyList.appendChild(btn);
+                });
+            }
+
+            clearHistoryBtn.addEventListener('click', () => {
+                localStorage.removeItem('g_search_hist');
+                renderHistory();
+            });
+
+            function escapeHtml(str) {
+                return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
+            }
+
+            // Init
+            renderHistory();
+            rebuildTable();
+        });
+    </script>
+</body>
+</html>
