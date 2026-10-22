@@ -1,757 +1,243 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Google Search URL Generator</title>
-    <!-- Tailwind CSS CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Font Awesome Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Google Fonts Inter -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-    
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: {
-                        sans: ['Inter', 'sans-serif'],
-                        mono: ['JetBrains Mono', 'monospace'],
-                    },
-                    colors: {
-                        lavenderBg: '#F9F8FC',
-                        lavenderCard: 'rgba(255, 255, 255, 0.85)',
-                        lavenderMuted: '#F3F0F9',
-                        lavenderBorder: '#E2DDF0',
-                        lavenderAccent: '#7E69AB',
-                        lavenderAccentHover: '#685393',
-                        lavenderSoftAccent: '#9A82C7',
-                        slateViolet: '#2D283D',
-                        slateSubtle: '#686177',
-                    },
-                    boxShadow: {
-                        'soft-lavender': '0 4px 20px -2px rgba(126, 105, 171, 0.08)',
-                        'glow-purple': '0 2px 10px rgba(126, 105, 171, 0.2)',
-                    }
-                }
-            }
-        }
-    </script>
-
-    <style>
-        body {
-            background-color: #F9F8FC;
-            background-image: 
-                radial-gradient(at 0% 0%, rgba(243, 240, 249, 0.8) 0px, transparent 50%),
-                radial-gradient(at 100% 100%, rgba(226, 221, 240, 0.5) 0px, transparent 50%);
-            background-attachment: fixed;
-            color: #2D283D;
-        }
-
-        .glass-panel {
-            background: rgba(255, 255, 255, 0.85);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid #E2DDF0;
-            box-shadow: 0 4px 20px -2px rgba(126, 105, 171, 0.06);
-        }
-
-        .glass-input {
-            background: rgba(255, 255, 255, 0.95);
-            border: 1px solid #E2DDF0;
-            color: #2D283D;
-            transition: all 0.2s ease;
-        }
-
-        .glass-input:focus {
-            border-color: #7E69AB;
-            box-shadow: 0 0 0 3px rgba(126, 105, 171, 0.15);
-            outline: none;
-        }
-
-        /* Visited Row Visual Dimming */
-        tr.row-visited {
-            background-color: rgba(243, 240, 249, 0.6) !important;
-        }
-        tr.row-visited td {
-            color: #686177;
-        }
-
-        /* Custom Scrollbar */
-        ::-webkit-scrollbar {
-            width: 6px;
-            height: 6px;
-        }
-        ::-webkit-scrollbar-track {
-            background: #F3F0F9;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #C3B9DD;
-            border-radius: 3px;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: #7E69AB;
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Google Search URL Generator</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script>
+tailwind.config={theme:{extend:{fontFamily:{sans:['Inter','system-ui','sans-serif'],mono:['JetBrains Mono','ui-monospace','monospace']},colors:{bg:'#F9F8FC',muted:'#F3F0F9',line:'#E2DDF0',acc:'#7E69AB',acch:'#685393',ink:'#2D283D',sub:'#5E5770'}}}}
+</script>
+<style type="text/tailwindcss">
+@layer components{
+.card{@apply bg-white/85 backdrop-blur border border-line rounded-2xl p-4 md:p-5 shadow-[0_4px_20px_-2px_rgba(126,105,171,.08)]}
+.inp{@apply w-full bg-white border border-line rounded-lg px-3 py-2 text-sm text-ink min-h-[36px] focus:outline-none focus:border-acc focus:ring-2 focus:ring-acc/25 disabled:opacity-40}
+.btn{@apply inline-flex items-center justify-center gap-1.5 min-h-[36px] px-3 rounded-lg border border-line bg-white text-ink text-sm font-medium hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-acc/40 transition-colors}
+.btn-p{@apply bg-acc text-white border-acc hover:bg-acch}
+.seg{@apply inline-flex items-center min-h-[36px] px-3 rounded-lg border border-line bg-white text-sm font-medium text-ink hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-acc/40}
+.seg[aria-pressed=true]{@apply bg-acc text-white border-acc}
+.tab{@apply min-h-[32px] px-3 rounded-md text-sm font-medium text-sub hover:bg-white/70 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-acc/40}
+.tab[aria-pressed=true]{@apply bg-white text-ink shadow-sm}
+.lbl{@apply block text-xs font-semibold text-sub mb-1}
+.chip{@apply inline-flex items-center gap-1 rounded-full bg-muted border border-line pl-2.5 pr-1 py-0.5 text-xs font-medium text-ink}
+.h{@apply text-base font-semibold text-ink mb-3 flex items-baseline gap-2}
+.h i{@apply not-italic text-sm text-acc font-bold}
+}
+</style>
 </head>
-<body class="font-sans antialiased text-xs md:text-sm p-3 md:p-5">
+<body class="bg-bg text-ink font-sans text-sm antialiased min-h-screen p-3 md:p-6" style="background-image:radial-gradient(at 0 0,#F3F0F9,transparent 50%),radial-gradient(at 100% 100%,rgba(226,221,240,.6),transparent 50%);background-attachment:fixed">
+<div id="toast" role="status" aria-live="polite" class="fixed top-4 right-4 z-50 max-w-xs bg-ink text-white px-4 py-2.5 rounded-xl shadow-xl text-sm opacity-0 -translate-y-3 transition pointer-events-none"></div>
+<main class="max-w-5xl mx-auto space-y-4">
 
-    <div class="max-w-7xl mx-auto space-y-3">
-        
-        <!-- Compact Header -->
-        <header class="glass-panel px-4 py-2.5 rounded-xl flex items-center justify-between">
-            <div class="flex items-center space-x-2.5">
-                <div class="w-8 h-8 rounded-lg bg-lavenderAccent text-white flex items-center justify-center shadow-glow-purple">
-                    <i class="fa-solid fa-magnifying-glass text-sm"></i>
-                </div>
-                <div>
-                    <h1 class="text-base font-bold text-slateViolet leading-tight tracking-tight">Google Search URL Generator</h1>
-                    <p class="text-[11px] text-slateSubtle">Multi-Region & SEO URL Suite &bull; Low-Saturation Lavender Theme</p>
-                </div>
-            </div>
+<header class="card !py-3 flex items-center justify-between gap-3">
+  <div>
+    <h1 class="text-lg font-bold tracking-tight">Google Search URL Generator</h1>
+    <p class="text-sub text-sm">Build Google search links in bulk, by language and country.</p>
+  </div>
+  <span id="badge" class="px-3 py-1 rounded-lg bg-muted border border-line font-medium whitespace-nowrap">0 queries</span>
+</header>
 
-            <div class="flex items-center space-x-2">
-                <span id="summaryBadge" class="px-2.5 py-1 bg-lavenderMuted text-slateViolet font-medium rounded-lg text-xs border border-lavenderBorder">
-                    0 Queries
-                </span>
-            </div>
-        </header>
+<section class="card" aria-labelledby="h1">
+  <h2 id="h1" class="h"><i>1</i>Keywords</h2>
+  <label for="kw" class="sr-only">Keywords, one per line</label>
+  <textarea id="kw" rows="6" spellcheck="false" class="inp font-mono" placeholder="One keyword per line. Pasting a spreadsheet column works too; only the first column is used."></textarea>
+  <div class="mt-2 flex flex-wrap items-center justify-between gap-2">
+    <p id="kwNote" class="text-sm text-sub">No keywords yet.</p>
+    <div class="flex gap-2"><button id="demo" class="btn">Load demo</button><button id="clear" class="btn">Clear</button></div>
+  </div>
+</section>
 
-        <!-- Notification Toast -->
-        <div id="toast" class="fixed top-4 right-4 z-50 transform -translate-y-12 opacity-0 transition-all duration-300 pointer-events-none">
-            <div class="bg-slateViolet text-white px-4 py-2.5 rounded-xl shadow-xl flex items-center space-x-2 text-xs font-medium">
-                <i id="toastIcon" class="fa-solid fa-circle-check text-emerald-400"></i>
-                <span id="toastMessage">Copied to clipboard</span>
-            </div>
-        </div>
+<section class="card" aria-labelledby="h2">
+  <h2 id="h2" class="h"><i>2</i>Language and country</h2>
+  <div id="presets" class="flex flex-wrap gap-2 mb-3" role="group" aria-label="Region presets"></div>
+  <div class="grid sm:grid-cols-2 gap-3">
+    <label><span class="lbl">Interface language (hl)</span><select id="hl" class="inp"></select></label>
+    <label><span class="lbl">Country (gl)</span><select id="gl" class="inp"></select></label>
+  </div>
+  <div id="custom" class="hidden"><label><span class="lbl">Custom hl</span><input id="hlc" class="inp" placeholder="e.g. pl"></label><label><span class="lbl">Custom gl</span><input id="glc" class="inp" placeholder="e.g. pl"></label></div>
 
-        <!-- Main Configuration Area -->
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-3">
-            
-            <!-- Left Panel: Batch Keyword Input -->
-            <div class="lg:col-span-5 flex flex-col space-y-2">
-                <div class="glass-panel p-3 rounded-xl flex-1 flex flex-col space-y-2">
-                    <div class="flex justify-between items-center">
-                        <label for="keywordInput" class="font-semibold text-slateViolet flex items-center gap-1.5 text-xs">
-                            <i class="fa-solid fa-list-ul text-lavenderAccent"></i>
-                            Keywords List (One per line)
-                        </label>
-                        <div class="space-x-1">
-                            <button id="loadDemoBtn" class="text-[11px] px-2 py-0.5 rounded bg-lavenderMuted text-slateViolet hover:bg-lavenderBorder transition">Load Demo</button>
-                            <button id="clearKeywordsBtn" class="text-[11px] px-2 py-0.5 rounded bg-white text-slateSubtle border border-lavenderBorder hover:bg-lavenderMuted transition">Clear</button>
-                        </div>
-                    </div>
-                    
-                    <textarea 
-                        id="keywordInput" 
-                        rows="7" 
-                        class="w-full glass-input rounded-lg p-2.5 text-xs font-mono resize-none flex-1" 
-                        placeholder="ai marketing tools&#10;seo audit checklist 2026&#10;content strategy template"
-                    >ai marketing tools
-seo audit checklist 2026</textarea>
-                </div>
-            </div>
-
-            <!-- Right Panel: Parameters & Options -->
-            <div class="lg:col-span-7 space-y-2">
-                <div class="glass-panel p-3 rounded-xl space-y-2.5">
-                    
-                    <!-- Presets Toolbar -->
-                    <div class="flex items-center justify-between pb-2 border-b border-lavenderBorder">
-                        <span class="text-[11px] font-semibold text-slateViolet flex items-center gap-1">
-                            <i class="fa-solid fa-bolt text-lavenderAccent"></i> Quick Region Clusters:
-                        </span>
-                        <div class="flex flex-wrap gap-1">
-                            <button type="button" class="preset-btn px-2 py-0.5 rounded bg-white hover:bg-lavenderMuted border border-lavenderBorder text-[11px] font-medium text-slateViolet transition" data-hl="de" data-gl="de">DACH (DE)</button>
-                            <button type="button" class="preset-btn px-2 py-0.5 rounded bg-white hover:bg-lavenderMuted border border-lavenderBorder text-[11px] font-medium text-slateViolet transition" data-hl="en" data-gl="us">US / Global</button>
-                            <button type="button" class="preset-btn px-2 py-0.5 rounded bg-white hover:bg-lavenderMuted border border-lavenderBorder text-[11px] font-medium text-slateViolet transition" data-hl="en" data-gl="gb">UK (GB)</button>
-                            <button type="button" class="preset-btn px-2 py-0.5 rounded bg-white hover:bg-lavenderMuted border border-lavenderBorder text-[11px] font-medium text-slateViolet transition" data-hl="es" data-gl="es">ES / LATAM</button>
-                            <button type="button" class="preset-btn px-2 py-0.5 rounded bg-white hover:bg-lavenderMuted border border-lavenderBorder text-[11px] font-medium text-slateViolet transition" data-hl="zh-CN" data-gl="cn">China (CN)</button>
-                        </div>
-                    </div>
-
-                    <!-- Language & Region Selectors -->
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-                        
-                        <!-- Language (hl) Select -->
-                        <div>
-                            <label for="hlSelect" class="block text-[11px] font-semibold text-slateViolet mb-1 flex items-center gap-1">
-                                <i class="fa-solid fa-language text-lavenderAccent"></i> Interface Language (hl)
-                            </label>
-                            <select id="hlSelect" class="w-full glass-input rounded-lg p-1.5 text-xs font-medium cursor-pointer">
-                                <option value="en" selected>English (en)</option>
-                                <option value="de">German (de)</option>
-                                <option value="es">Spanish (es)</option>
-                                <option value="fr">French (fr)</option>
-                                <option value="it">Italian (it)</option>
-                                <option value="zh-CN">Chinese Simplified (zh-CN)</option>
-                                <option value="zh-TW">Chinese Traditional (zh-TW)</option>
-                                <option value="ja">Japanese (ja)</option>
-                                <option value="ko">Korean (ko)</option>
-                                <option value="pt">Portuguese (pt)</option>
-                                <option value="ru">Russian (ru)</option>
-                                <option value="nl">Dutch (nl)</option>
-                                <option value="custom">Custom Code...</option>
-                            </select>
-                        </div>
-
-                        <!-- Country/Region (gl) Select -->
-                        <div>
-                            <label for="glSelect" class="block text-[11px] font-semibold text-slateViolet mb-1 flex items-center gap-1">
-                                <i class="fa-solid fa-globe text-lavenderAccent"></i> Target Country / Region (gl)
-                            </label>
-                            <select id="glSelect" class="w-full glass-input rounded-lg p-1.5 text-xs font-medium cursor-pointer">
-                                <option value="us" selected>United States (US)</option>
-                                <option value="de">Germany (DE)</option>
-                                <option value="at">Austria (AT)</option>
-                                <option value="ch">Switzerland (CH)</option>
-                                <option value="gb">United Kingdom (GB)</option>
-                                <option value="es">Spain (ES)</option>
-                                <option value="mx">Mexico (MX)</option>
-                                <option value="cn">China (CN)</option>
-                                <option value="tw">Taiwan (TW)</option>
-                                <option value="hk">Hong Kong (HK)</option>
-                                <option value="fr">France (FR)</option>
-                                <option value="it">Italy (IT)</option>
-                                <option value="jp">Japan (JP)</option>
-                                <option value="custom">Custom Code...</option>
-                            </select>
-                        </div>
-
-                    </div>
-
-                    <!-- Custom Parameter Inputs (Hidden by default) -->
-                    <div id="customInputsRow" class="hidden grid-cols-2 gap-2 bg-lavenderMuted/60 p-2 rounded-lg border border-lavenderBorder">
-                        <div>
-                            <label class="text-[10px] text-slateSubtle font-semibold">Custom hl:</label>
-                            <input type="text" id="hlCustom" placeholder="e.g. pl" class="w-full glass-input rounded px-2 py-1 text-xs">
-                        </div>
-                        <div>
-                            <label class="text-[10px] text-slateSubtle font-semibold">Custom gl:</label>
-                            <input type="text" id="glCustom" placeholder="e.g. pl" class="w-full glass-input rounded px-2 py-1 text-xs">
-                        </div>
-                    </div>
-
-                    <!-- SEO Modifiers & Time Filters -->
-                    <div class="space-y-1.5">
-                        <label class="block text-[11px] font-semibold text-slateViolet flex items-center gap-1">
-                            <i class="fa-solid fa-sliders text-lavenderAccent"></i> SEO Modifiers & Filters
-                        </label>
-                        
-                        <div class="grid grid-cols-2 sm:grid-cols-3 gap-1.5">
-                            <!-- Toggle Exact -->
-                            <label class="flex items-center space-x-2 bg-white p-1.5 rounded-lg border border-lavenderBorder cursor-pointer">
-                                <input type="checkbox" id="exactMatch" class="w-3.5 h-3.5 rounded text-lavenderAccent focus:ring-lavenderAccent">
-                                <span class="text-xs font-medium text-slateViolet">Exact <code class="text-lavenderAccent font-bold">"..."</code></span>
-                            </label>
-
-                            <!-- Site Constraint -->
-                            <div class="flex items-center space-x-1 bg-white p-1.5 rounded-lg border border-lavenderBorder">
-                                <input type="checkbox" id="siteToggle" class="w-3.5 h-3.5 rounded text-lavenderAccent focus:ring-lavenderAccent">
-                                <span class="text-xs font-medium text-slateViolet min-w-[26px]">site:</span>
-                                <input type="text" id="siteVal" placeholder="youtube.com" disabled class="w-full glass-input rounded px-1.5 py-0.5 text-[11px] font-mono disabled:opacity-40">
-                            </div>
-
-                            <!-- Filetype Constraint -->
-                            <div class="flex items-center space-x-1 bg-white p-1.5 rounded-lg border border-lavenderBorder">
-                                <input type="checkbox" id="filetypeToggle" class="w-3.5 h-3.5 rounded text-lavenderAccent focus:ring-lavenderAccent">
-                                <span class="text-xs font-medium text-slateViolet min-w-[32px]">file:</span>
-                                <select id="filetypeVal" disabled class="w-full glass-input rounded px-1 py-0.5 text-[11px] font-mono disabled:opacity-40">
-                                    <option value="pdf">pdf</option>
-                                    <option value="docx">docx</option>
-                                    <option value="pptx">pptx</option>
-                                    <option value="xlsx">xlsx</option>
-                                </select>
-                            </div>
-
-                            <!-- InURL Constraint -->
-                            <div class="flex items-center space-x-1 bg-white p-1.5 rounded-lg border border-lavenderBorder">
-                                <input type="checkbox" id="inurlToggle" class="w-3.5 h-3.5 rounded text-lavenderAccent focus:ring-lavenderAccent">
-                                <span class="text-xs font-medium text-slateViolet min-w-[32px]">inurl:</span>
-                                <input type="text" id="inurlVal" placeholder="blog..." disabled class="w-full glass-input rounded px-1.5 py-0.5 text-[11px] font-mono disabled:opacity-40">
-                            </div>
-
-                            <!-- Intitle Constraint -->
-                            <div class="flex items-center space-x-1 bg-white p-1.5 rounded-lg border border-lavenderBorder">
-                                <input type="checkbox" id="intitleToggle" class="w-3.5 h-3.5 rounded text-lavenderAccent focus:ring-lavenderAccent">
-                                <span class="text-xs font-medium text-slateViolet min-w-[32px]">title:</span>
-                                <input type="text" id="intitleVal" placeholder="guide..." disabled class="w-full glass-input rounded px-1.5 py-0.5 text-[11px] font-mono disabled:opacity-40">
-                            </div>
-
-                            <!-- Time Filter -->
-                            <div class="flex items-center space-x-1 bg-white p-1.5 rounded-lg border border-lavenderBorder">
-                                <span class="text-xs font-medium text-slateViolet shrink-0"><i class="fa-regular fa-clock text-lavenderAccent"></i></span>
-                                <select id="timeFilter" class="w-full glass-input rounded px-1 py-0.5 text-[11px] cursor-pointer">
-                                    <option value="">Time: Any time</option>
-                                    <option value="qdr:d">Past 24 hours</option>
-                                    <option value="qdr:w">Past week</option>
-                                    <option value="qdr:m">Past month</option>
-                                    <option value="qdr:y">Past year</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-
-        </div>
-
-        <!-- Output & Results Section -->
-        <div class="glass-panel p-3.5 rounded-xl space-y-2.5">
-            
-            <!-- Table Actions Toolbar -->
-            <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 pb-2 border-b border-lavenderBorder">
-                <div class="flex items-center space-x-2">
-                    <div class="flex items-center space-x-1 bg-lavenderMuted p-1 rounded-lg border border-lavenderBorder">
-                        <button id="filterAllBtn" class="px-2.5 py-1 text-xs font-medium rounded-md bg-white text-slateViolet shadow-sm">All</button>
-                        <button id="filterUnvisitedBtn" class="px-2.5 py-1 text-xs font-medium rounded-md text-slateSubtle hover:bg-white/50">Pending</button>
-                        <button id="filterVisitedBtn" class="px-2.5 py-1 text-xs font-medium rounded-md text-slateSubtle hover:bg-white/50">Visited</button>
-                    </div>
-
-                    <!-- Prominent Batch Open Button -->
-                    <button id="batchOpenAllBtn" class="px-3 py-1.5 rounded-lg bg-lavenderAccent hover:bg-lavenderAccentHover text-white font-semibold text-xs shadow-glow-purple transition flex items-center gap-1.5">
-                        <i class="fa-solid fa-layer-group"></i>
-                        <span>Open All Links</span>
-                    </button>
-                </div>
-
-                <div class="flex items-center gap-2 w-full sm:w-auto justify-end">
-                    <input type="text" id="tableSearch" placeholder="Search query or URL..." class="glass-input rounded-lg px-2.5 py-1 text-xs w-36 sm:w-44">
-                    
-                    <button id="exportCsvBtn" class="px-2.5 py-1 rounded-lg bg-white hover:bg-lavenderMuted text-slateViolet border border-lavenderBorder text-xs font-medium transition flex items-center gap-1">
-                        <i class="fa-solid fa-file-csv text-lavenderAccent"></i> Export CSV
-                    </button>
-                    
-                    <button id="resetVisitedBtn" class="px-2 py-1 rounded-lg bg-white hover:bg-lavenderMuted text-slateSubtle border border-lavenderBorder text-xs font-medium transition flex items-center gap-1" title="Reset Visited State">
-                        <i class="fa-solid fa-rotate-left text-slateSubtle"></i> Reset Status
-                    </button>
-                </div>
-            </div>
-
-            <!-- Table View -->
-            <div class="overflow-x-auto max-h-[460px] overflow-y-auto rounded-lg border border-lavenderBorder bg-white">
-                <table class="w-full text-left border-collapse">
-                    <thead class="bg-lavenderMuted sticky top-0 z-10 text-[11px] font-bold text-slateViolet uppercase border-b border-lavenderBorder">
-                        <tr>
-                            <th class="py-2 px-3 w-10 text-center">#</th>
-                            <th class="py-2 px-3 w-24">Status</th>
-                            <th class="py-2 px-3">Keyword & Query String</th>
-                            <th class="py-2 px-3 w-20 text-center">Target</th>
-                            <th class="py-2 px-3">Generated Google Search URL</th>
-                            <th class="py-2 px-3 w-24 text-center">Action</th>
-                        </tr>
-                    </thead>
-                    <tbody id="tableBody" class="divide-y divide-lavenderBorder text-xs">
-                        <!-- Dynamic Rows -->
-                    </tbody>
-                </table>
-            </div>
-
-            <div class="text-[11px] text-slateSubtle flex flex-col sm:flex-row justify-between items-start sm:items-center gap-1 px-1">
-                <span><i class="fa-solid fa-circle-info text-lavenderAccent"></i> Clicking <b>"Open"</b> or the <b>URL link</b> launches Google search & automatically copies the URL. Please allow popups for batch opening.</span>
-                <span id="visitedCounterText" class="font-medium text-slateViolet">0 / 0 Opened</span>
-            </div>
-
-        </div>
-
-        <!-- History Footer -->
-        <div class="glass-panel p-2.5 rounded-xl flex items-center justify-between text-xs">
-            <div class="flex items-center space-x-2 overflow-x-auto py-0.5">
-                <span class="font-semibold text-slateViolet shrink-0"><i class="fa-solid fa-clock-rotate-left text-lavenderAccent"></i> Recent Queries:</span>
-                <div id="historyList" class="flex items-center space-x-1.5">
-                    <span class="text-slateSubtle italic text-[11px]">No history saved</span>
-                </div>
-            </div>
-            <button id="clearHistoryBtn" class="text-[11px] text-slateSubtle hover:text-slateViolet shrink-0 ml-2">Clear History</button>
-        </div>
-
+  <details class="mt-4">
+    <summary class="btn w-fit cursor-pointer">Advanced filters</summary>
+    <div class="grid sm:grid-cols-2 md:grid-cols-3 gap-3 mt-3">
+      <label><span class="lbl">Search type</span><select id="tbm" class="inp"><option value="">Web</option><option value="isch">Images</option><option value="vid">Videos</option><option value="nws">News</option></select></label>
+      <label><span class="lbl">Time range</span><select id="tf" class="inp"><option value="">Any time</option><option value="qdr:d">Past 24 hours</option><option value="qdr:w">Past week</option><option value="qdr:m">Past month</option><option value="qdr:y">Past year</option></select></label>
+      <label><span class="lbl">Results per page</span><select id="num" class="inp"><option value="">Default</option><option>20</option><option>50</option><option>100</option></select></label>
+      <label><span class="lbl">Only this site</span><input id="site" class="inp" placeholder="youtube.com"></label>
+      <label><span class="lbl">URL contains</span><input id="inurl" class="inp" placeholder="blog"></label>
+      <label><span class="lbl">Title contains</span><input id="intitle" class="inp" placeholder="guide"></label>
+      <label><span class="lbl">File type</span><select id="ft" class="inp"><option value="">Any</option><option>pdf</option><option>docx</option><option>pptx</option><option>xlsx</option></select></label>
+      <label class="flex items-center gap-2 mt-5"><input type="checkbox" id="exact" class="w-4 h-4 accent-acc"><span>Exact match (adds quotes)</span></label>
+      <label class="flex items-center gap-2 mt-5"><input type="checkbox" id="pws" class="w-4 h-4 accent-acc"><span>Non-personalized results</span></label>
     </div>
+  </details>
 
-    <!-- Application JavaScript Logic -->
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            // DOM Elements
-            const keywordInput = document.getElementById('keywordInput');
-            const loadDemoBtn = document.getElementById('loadDemoBtn');
-            const clearKeywordsBtn = document.getElementById('clearKeywordsBtn');
-            const summaryBadge = document.getElementById('summaryBadge');
+  <div id="chips" class="flex flex-wrap gap-1.5 mt-3"></div>
+  <div class="mt-3 rounded-lg bg-muted border border-line p-3">
+    <div class="lbl">Preview of the first link</div>
+    <code id="preview" class="block font-mono text-xs break-all text-acch">Add a keyword to see the link.</code>
+  </div>
+</section>
 
-            const hlSelect = document.getElementById('hlSelect');
-            const glSelect = document.getElementById('glSelect');
-            const customInputsRow = document.getElementById('customInputsRow');
-            const hlCustom = document.getElementById('hlCustom');
-            const glCustom = document.getElementById('glCustom');
+<section class="card !p-0" aria-labelledby="h3">
+  <div class="sticky top-2 z-20 bg-white/95 backdrop-blur rounded-t-2xl border-b border-line p-4 space-y-3">
+    <div class="flex flex-wrap items-center justify-between gap-2">
+      <h2 id="h3" class="h !mb-0"><i>3</i>Results</h2>
+      <span id="count" class="text-sm font-medium text-sub">0 / 0 opened</span>
+    </div>
+    <div class="flex flex-wrap items-center gap-2">
+      <button id="next" class="btn btn-p" title="Ctrl/Cmd + Enter">Open next</button>
+      <button id="all" class="btn">Open all pending</button>
+      <button id="copyAll" class="btn">Copy all links</button>
+      <button id="csv" class="btn">Export CSV</button>
+      <button id="reset" class="btn">Reset status</button>
+    </div>
+    <div class="flex flex-wrap items-center justify-between gap-2">
+      <div id="tabs" class="inline-flex gap-1 p-1 rounded-lg bg-muted border border-line">
+        <button class="tab" data-f="all">All</button><button class="tab" data-f="pending">Pending</button><button class="tab" data-f="visited">Visited</button>
+      </div>
+      <label class="sr-only" for="q">Filter results</label>
+      <input id="q" class="inp !w-56" placeholder="Filter by keyword or link">
+    </div>
+  </div>
+  <ul id="list" class="divide-y divide-line"></ul>
+  <p class="p-4 text-sm text-sub border-t border-line">Opening many tabs at once may be blocked by your browser. If that happens, allow pop-ups for this page, then click Open all pending again.</p>
+</section>
 
-            const exactMatch = document.getElementById('exactMatch');
-            const siteToggle = document.getElementById('siteToggle');
-            const siteVal = document.getElementById('siteVal');
-            const filetypeToggle = document.getElementById('filetypeToggle');
-            const filetypeVal = document.getElementById('filetypeVal');
-            const inurlToggle = document.getElementById('inurlToggle');
-            const inurlVal = document.getElementById('inurlVal');
-            const intitleToggle = document.getElementById('intitleToggle');
-            const intitleVal = document.getElementById('intitleVal');
-            const timeFilter = document.getElementById('timeFilter');
+<section class="card !py-3 flex flex-wrap items-center justify-between gap-2">
+  <div class="flex flex-wrap items-center gap-2"><span class="font-semibold">Recent searches</span><span id="hist" class="flex flex-wrap gap-1.5"></span></div>
+  <button id="clearHist" class="btn">Clear history</button>
+</section>
+</main>
 
-            const batchOpenAllBtn = document.getElementById('batchOpenAllBtn');
-            const tableBody = document.getElementById('tableBody');
-            const tableSearch = document.getElementById('tableSearch');
-            const visitedCounterText = document.getElementById('visitedCounterText');
-            const resetVisitedBtn = document.getElementById('resetVisitedBtn');
-            const exportCsvBtn = document.getElementById('exportCsvBtn');
+<script>
+const $=id=>document.getElementById(id);
+const store={get(k,d){try{const v=JSON.parse(localStorage.getItem(k));return v==null?d:v}catch{return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch{}}};
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const LANGS=[['de','German (de)'],['es','Spanish (es)'],['en','English (en)'],['fr','French (fr)'],['it','Italian (it)'],['pt','Portuguese (pt)'],['nl','Dutch (nl)'],['zh-CN','Chinese Simplified (zh-CN)'],['zh-TW','Chinese Traditional (zh-TW)'],['ja','Japanese (ja)'],['ko','Korean (ko)'],['ru','Russian (ru)'],['custom','Custom code...']];
+const CTRY=[['de','Germany (DE)'],['at','Austria (AT)'],['ch','Switzerland (CH)'],['es','Spain (ES)'],['mx','Mexico (MX)'],['ar','Argentina (AR)'],['co','Colombia (CO)'],['us','United States (US)'],['gb','United Kingdom (GB)'],['fr','France (FR)'],['it','Italy (IT)'],['nl','Netherlands (NL)'],['cn','China (CN)'],['tw','Taiwan (TW)'],['jp','Japan (JP)'],['custom','Custom code...']];
+const PRESETS=[['Germany','de','de'],['Austria','de','at'],['Switzerland','de','ch'],['Spain','es','es'],['Mexico','es','mx'],['US','en','us'],['UK','en','gb']];
+const fill=(el,a)=>el.innerHTML=a.map(([v,t])=>`<option value="${v}">${t}</option>`).join('');
+const [kw,hl,gl,hlc,glc,tbm,tf,num,site,inurl,intitle,ft,exact,pws]=['kw','hl','gl','hlc','glc','tbm','tf','num','site','inurl','intitle','ft','exact','pws'].map($);
+fill(hl,LANGS);fill(gl,CTRY);hl.value='de';gl.value='de';
 
-            const filterAllBtn = document.getElementById('filterAllBtn');
-            const filterUnvisitedBtn = document.getElementById('filterUnvisitedBtn');
-            const filterVisitedBtn = document.getElementById('filterVisitedBtn');
+let visited=new Set(store.get('gsug_visited',[])),items=[],filter='all',dupes=0,chipFns=[];
+const saveVisited=()=>store.set('gsug_visited',[...visited]);
+const region=()=>({hl:hl.value==='custom'?(hlc.value.trim()||'de'):hl.value,gl:gl.value==='custom'?(glc.value.trim()||'de'):gl.value});
+const clean=s=>s.trim().replace(/^https?:\/\//,'').replace(/\/$/,'');
 
-            const historyList = document.getElementById('historyList');
-            const clearHistoryBtn = document.getElementById('clearHistoryBtn');
+function parse(){const seen=new Set(),out=[];dupes=0;
+  kw.value.split('\n').forEach(l=>{const k=l.split('\t')[0].trim();if(!k)return;const key=k.toLowerCase();if(seen.has(key)){dupes++;return}seen.add(key);out.push(k)});return out}
 
-            const toast = document.getElementById('toast');
-            const toastMessage = document.getElementById('toastMessage');
+function build(k){
+  let q=exact.checked?`"${k}"`:k;
+  if(site.value.trim())q+=' site:'+clean(site.value);
+  if(ft.value)q+=' filetype:'+ft.value;
+  if(inurl.value.trim())q+=' inurl:'+inurl.value.trim();
+  if(intitle.value.trim())q+=' intitle:'+intitle.value.trim();
+  const r=region(),p=new URLSearchParams({q,hl:r.hl,gl:r.gl});
+  if(tf.value)p.set('tbs',tf.value);if(tbm.value)p.set('tbm',tbm.value);if(num.value)p.set('num',num.value);if(pws.checked)p.set('pws','0');
+  return {kw:k,q,hl:r.hl,gl:r.gl,url:'https://www.google.com/search?'+p}}
 
-            // State
-            let visitedSet = new Set();
-            let currentData = [];
-            let activeFilter = 'all';
+function chips(){const c=[],add=(l,f)=>c.push([l,f]);
+  if(exact.checked)add('Exact match',()=>exact.checked=false);
+  if(site.value.trim())add('site: '+clean(site.value),()=>site.value='');
+  if(inurl.value.trim())add('URL contains '+inurl.value.trim(),()=>inurl.value='');
+  if(intitle.value.trim())add('Title contains '+intitle.value.trim(),()=>intitle.value='');
+  if(ft.value)add('File type: '+ft.value,()=>ft.value='');
+  if(tf.value)add(tf.selectedOptions[0].text,()=>tf.value='');
+  if(tbm.value)add(tbm.selectedOptions[0].text+' search',()=>tbm.value='');
+  if(num.value)add(num.value+' results',()=>num.value='');
+  if(pws.checked)add('Non-personalized',()=>pws.checked=false);
+  return c}
 
-            // Check Custom Row Visibility
-            function checkCustomRow() {
-                if (hlSelect.value === 'custom' || glSelect.value === 'custom') {
-                    customInputsRow.classList.remove('hidden');
-                    customInputsRow.classList.add('grid');
-                } else {
-                    customInputsRow.classList.add('hidden');
-                    customInputsRow.classList.remove('grid');
-                }
-            }
+function rebuild(){
+  const ks=parse();items=ks.map(build);
+  $('badge').textContent=items.length+(items.length===1?' query':' queries');
+  $('kwNote').textContent=items.length?`${items.length} keyword${items.length===1?'':'s'}`+(dupes?` · ${dupes} duplicate${dupes===1?'':'s'} removed`:''):'No keywords yet.';
+  $('custom').className=(hl.value==='custom'||gl.value==='custom')?'grid grid-cols-2 gap-3 mt-3':'hidden';
+  const r=region();
+  $('presets').innerHTML=PRESETS.map(([n,h,g],i)=>`<button class="seg" data-p="${i}" aria-pressed="${r.hl===h&&r.gl===g}">${n}</button>`).join('');
+  chipFns=chips();
+  $('chips').innerHTML=chipFns.map(([l],i)=>`<span class="chip">${esc(l)}<button class="w-5 h-5 rounded-full hover:bg-line focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-acc/40" data-c="${i}" aria-label="Remove filter ${esc(l)}">&times;</button></span>`).join('');
+  $('preview').textContent=items[0]?items[0].url:'Add a keyword to see the link.';
+  render()}
 
-            [hlSelect, glSelect].forEach(select => {
-                select.addEventListener('change', () => {
-                    checkCustomRow();
-                    rebuildTable();
-                });
-            });
+function render(){
+  const term=$('q').value.toLowerCase().trim();
+  document.querySelectorAll('#tabs .tab').forEach(b=>b.setAttribute('aria-pressed',b.dataset.f===filter));
+  const rows=items.map((it,i)=>[it,i]).filter(([it])=>{
+    const v=visited.has(it.url);
+    if(filter==='pending'&&v)return false;if(filter==='visited'&&!v)return false;
+    return !term||it.kw.toLowerCase().includes(term)||it.url.toLowerCase().includes(term)});
+  $('list').innerHTML=rows.length?rows.map(([it,i])=>{const v=visited.has(it.url);return `
+  <li class="flex items-start gap-3 px-4 py-3 ${v?'bg-muted/60':''}" data-i="${i}">
+    <span class="w-7 pt-0.5 text-right text-sub tabular-nums">${i+1}</span>
+    <span class="mt-1.5 w-2.5 h-2.5 rounded-full shrink-0 ${v?'bg-emerald-500':'bg-line border border-acc/40'}" title="${v?'Visited':'Pending'}"></span>
+    <div class="min-w-0 flex-1">
+      <div class="font-medium break-words ${v?'text-sub':''}">${esc(it.kw)}</div>
+      ${it.q!==it.kw?`<div class="font-mono text-xs text-acc break-words">${esc(it.q)}</div>`:''}
+      <div class="url hidden mt-1 font-mono text-xs text-sub break-all">${esc(it.url)}</div>
+    </div>
+    <span class="hidden sm:inline text-xs font-mono text-sub bg-muted border border-line rounded px-1.5 py-0.5">${esc(it.hl)}-${esc(it.gl)}</span>
+    <button class="btn" data-a="copy" aria-label="Copy link for ${esc(it.kw)}">Copy</button>
+    <button class="btn" data-a="show" aria-label="Show link for ${esc(it.kw)}">Link</button>
+    <button class="btn btn-p" data-a="open" aria-label="Open search for ${esc(it.kw)}">Open</button>
+  </li>`}).join(''):`<li class="px-4 py-10 text-center text-sub">${items.length?'Nothing matches this filter.':'Add keywords above and your links will appear here.'}</li>`;
+  $('count').textContent=`${items.filter(it=>visited.has(it.url)).length} / ${items.length} opened`}
 
-            [hlCustom, glCustom].forEach(input => {
-                input.addEventListener('input', rebuildTable);
-            });
+function toast(m,err){const t=$('toast');t.textContent=m;t.className=t.className.replace(/bg-\S+/,err?'bg-rose-700':'bg-ink');
+  t.classList.remove('opacity-0','-translate-y-3');clearTimeout(toast.t);toast.t=setTimeout(()=>t.classList.add('opacity-0','-translate-y-3'),2600)}
+async function copy(t,m='Copied'){
+  try{await navigator.clipboard.writeText(t)}catch{const a=document.createElement('textarea');a.value=t;document.body.appendChild(a);a.select();let ok=false;try{ok=document.execCommand('copy')}catch{}a.remove();if(!ok){toast('Copy failed. Select the text and copy it manually.',1);return}}
+  toast(m)}
 
-            // Preset Cluster Handler
-            document.querySelectorAll('.preset-btn').forEach(btn => {
-                btn.addEventListener('click', () => {
-                    const hl = btn.dataset.hl;
-                    const gl = btn.dataset.gl;
-                    hlSelect.value = hl;
-                    glSelect.value = gl;
-                    checkCustomRow();
-                    rebuildTable();
-                    showToast(`Switched region preset to ${hl.toUpperCase()}-${gl.toUpperCase()}`);
-                });
-            });
+function openUrl(it){const w=window.open(it.url,'_blank');if(!w)return false;w.opener=null;visited.add(it.url);addHist(it.kw);return true}
+function openNext(){
+  const it=items.find(x=>!visited.has(x.url));
+  if(!items.length)return toast('Add keywords first.',1);
+  if(!it)return toast('Every link has been opened.');
+  if(!openUrl(it))return toast('Pop-up blocked. Allow pop-ups for this page and try again.',1);
+  saveVisited();render();toast('Opened: '+it.kw)}
+function openAll(){
+  const p=items.filter(x=>!visited.has(x.url));
+  if(!p.length)return toast(items.length?'Nothing pending.':'Add keywords first.',1);
+  if(p.length>8&&!confirm(`Open ${p.length} tabs at once? Your browser may block some of them.`))return;
+  let ok=0;p.forEach(it=>{if(openUrl(it))ok++});
+  saveVisited();render();
+  toast(ok===p.length?`Opened ${ok} tab${ok===1?'':'s'}.`:`Opened ${ok} of ${p.length}. The rest were blocked; allow pop-ups and click again.`,ok!==p.length)}
 
-            // Toggle Input Binds
-            const bindToggle = (toggle, input) => {
-                toggle.addEventListener('change', (e) => {
-                    input.disabled = !e.target.checked;
-                    if (e.target.checked) input.focus();
-                    rebuildTable();
-                });
-                input.addEventListener('input', rebuildTable);
-                input.addEventListener('change', rebuildTable);
-            };
+const cell=s=>{s=String(s);if(/^[=+\-@]/.test(s))s="'"+s;return '"'+s.replace(/"/g,'""')+'"'};
+function exportCsv(){
+  if(!items.length)return toast('Nothing to export.',1);
+  const rows=[['Keyword','Query','HL','GL','URL','Status'],...items.map(d=>[d.kw,d.q,d.hl,d.gl,d.url,visited.has(d.url)?'Visited':'Pending'])];
+  const blob=new Blob(['\uFEFF'+rows.map(r=>r.map(cell).join(',')).join('\r\n')],{type:'text/csv;charset=utf-8'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=`google_urls_${new Date().toISOString().slice(0,10)}.csv`;
+  document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),1000);toast('CSV exported.')}
 
-            bindToggle(siteToggle, siteVal);
-            bindToggle(filetypeToggle, filetypeVal);
-            bindToggle(inurlToggle, inurlVal);
-            bindToggle(intitleToggle, intitleVal);
+function addHist(k){let h=store.get('gsug_history',[]).filter(x=>x.toLowerCase()!==k.toLowerCase());h.unshift(k);store.set('gsug_history',h.slice(0,8));renderHist()}
+function renderHist(){const h=store.get('gsug_history',[]);
+  $('hist').innerHTML=h.length?h.map(k=>`<button class="btn !min-h-[30px] font-mono text-xs" data-h="${esc(k)}">${esc(k)}</button>`).join(''):'<span class="text-sub">Nothing yet.</span>'}
 
-            [exactMatch, timeFilter, keywordInput].forEach(el => {
-                el.addEventListener('input', rebuildTable);
-                el.addEventListener('change', rebuildTable);
-            });
-
-            tableSearch.addEventListener('input', renderTable);
-
-            // Quick Actions
-            clearKeywordsBtn.addEventListener('click', () => {
-                keywordInput.value = '';
-                rebuildTable();
-            });
-
-            loadDemoBtn.addEventListener('click', () => {
-                keywordInput.value = "ai marketing tools\nseo audit checklist 2026\ncontent strategy template";
-                rebuildTable();
-            });
-
-            resetVisitedBtn.addEventListener('click', () => {
-                visitedSet.clear();
-                renderTable();
-                showToast("Reset all visited statuses", "fa-rotate-left");
-            });
-
-            // Filter Tabs
-            const setTabActive = (btn) => {
-                [filterAllBtn, filterUnvisitedBtn, filterVisitedBtn].forEach(b => {
-                    b.className = "px-2.5 py-1 text-xs font-medium rounded-md text-slateSubtle hover:bg-white/50";
-                });
-                btn.className = "px-2.5 py-1 text-xs font-medium rounded-md bg-white text-slateViolet shadow-sm";
-            };
-
-            filterAllBtn.addEventListener('click', () => { activeFilter = 'all'; setTabActive(filterAllBtn); renderTable(); });
-            filterUnvisitedBtn.addEventListener('click', () => { activeFilter = 'unvisited'; setTabActive(filterUnvisitedBtn); renderTable(); });
-            filterVisitedBtn.addEventListener('click', () => { activeFilter = 'visited'; setTabActive(filterVisitedBtn); renderTable(); });
-
-            // Resolve hl and gl
-            function getHlGl() {
-                let hl = hlSelect.value === 'custom' ? hlCustom.value.trim() : hlSelect.value;
-                let gl = glSelect.value === 'custom' ? glCustom.value.trim() : glSelect.value;
-                return {
-                    hl: hl || 'en',
-                    gl: gl || 'us'
-                };
-            }
-
-            // Build Individual Item URL
-            function buildUrlItem(rawKw) {
-                let kw = rawKw.trim();
-                if (!kw) return null;
-
-                let q = kw;
-                if (exactMatch.checked) q = `"${q}"`;
-                if (siteToggle.checked && siteVal.value.trim()) q += ` site:${siteVal.value.trim()}`;
-                if (filetypeToggle.checked && filetypeVal.value.trim()) q += ` filetype:${filetypeVal.value.trim()}`;
-                if (inurlToggle.checked && inurlVal.value.trim()) q += ` inurl:${inurlVal.value.trim()}`;
-                if (intitleToggle.checked && intitleVal.value.trim()) q += ` intitle:${intitleVal.value.trim()}`;
-
-                const params = new URLSearchParams();
-                params.set('q', q);
-
-                const { hl, gl } = getHlGl();
-                params.set('hl', hl);
-                params.set('gl', gl);
-
-                if (timeFilter.value) params.set('tbs', timeFilter.value);
-
-                return {
-                    keyword: kw,
-                    query: q,
-                    hl: hl,
-                    gl: gl,
-                    url: `https://www.google.com/search?${params.toString()}`
-                };
-            }
-
-            function rebuildTable() {
-                const lines = keywordInput.value.split('\n').map(l => l.trim()).filter(l => l.length > 0);
-                summaryBadge.textContent = `${lines.length} Queries`;
-
-                currentData = [];
-                lines.forEach(line => {
-                    const item = buildUrlItem(line);
-                    if (item) currentData.push(item);
-                });
-
-                renderTable();
-            }
-
-            function renderTable() {
-                tableBody.innerHTML = '';
-                const searchTerm = tableSearch.value.toLowerCase().trim();
-
-                let displayedCount = 0;
-                let visitedCount = 0;
-
-                currentData.forEach((item, idx) => {
-                    const isVisited = visitedSet.has(item.url);
-                    if (isVisited) visitedCount++;
-
-                    // Filter Logic
-                    if (activeFilter === 'unvisited' && isVisited) return;
-                    if (activeFilter === 'visited' && !isVisited) return;
-
-                    if (searchTerm && !item.keyword.toLowerCase().includes(searchTerm) && !item.url.toLowerCase().includes(searchTerm)) {
-                        return;
-                    }
-
-                    displayedCount++;
-
-                    const tr = document.createElement('tr');
-                    tr.className = `hover:bg-lavenderMuted/50 transition ${isVisited ? 'row-visited' : ''}`;
-
-                    tr.innerHTML = `
-                        <td class="py-2 px-3 font-mono text-slateSubtle text-center text-[11px]">${idx + 1}</td>
-                        <td class="py-2 px-3">
-                            ${isVisited ? `
-                                <span class="inline-flex items-center gap-1 text-[10px] bg-emerald-50 text-emerald-700 font-semibold px-2 py-0.5 rounded-full border border-emerald-200">
-                                    <i class="fa-solid fa-check text-[9px]"></i> Visited
-                                </span>
-                            ` : `
-                                <span class="inline-flex items-center gap-1 text-[10px] bg-lavenderMuted text-slateSubtle font-medium px-2 py-0.5 rounded-full border border-lavenderBorder">
-                                    Pending
-                                </span>
-                            `}
-                        </td>
-                        <td class="py-2 px-3 font-medium text-slateViolet">
-                            <div>${escapeHtml(item.keyword)}</div>
-                            ${item.query !== item.keyword ? `<div class="text-[10px] text-lavenderAccent font-mono">${escapeHtml(item.query)}</div>` : ''}
-                        </td>
-                        <td class="py-2 px-3 text-center">
-                            <span class="bg-lavenderMuted text-slateViolet font-mono text-[10px] px-1.5 py-0.5 rounded border border-lavenderBorder uppercase">
-                                ${escapeHtml(item.hl)}-${escapeHtml(item.gl)}
-                            </span>
-                        </td>
-                        <td class="py-2 px-3 font-mono text-[11px] text-lavenderAccent hover:text-lavenderAccentHover cursor-pointer max-w-xs truncate" title="Click to copy URL to clipboard" onclick="copyText('${escapeHtml(item.url)}')">
-                            <span class="underline decoration-lavenderSoftAccent underline-offset-2">${escapeHtml(item.url)}</span>
-                        </td>
-                        <td class="py-2 px-3 text-center">
-                            <button onclick="openAndCopy('${escapeHtml(item.url)}', '${escapeHtml(item.keyword)}')" class="px-2.5 py-1 rounded bg-lavenderAccent hover:bg-lavenderAccentHover text-white font-medium text-[11px] transition shadow-sm flex items-center justify-center gap-1 mx-auto">
-                                <span>Open</span>
-                                <i class="fa-solid fa-arrow-up-right-from-square text-[9px]"></i>
-                            </button>
-                        </td>
-                    `;
-
-                    tableBody.appendChild(tr);
-                });
-
-                if (displayedCount === 0) {
-                    tableBody.innerHTML = `
-                        <tr>
-                            <td colspan="6" class="py-8 text-center text-slateSubtle">
-                                No matching queries or generated URLs to display.
-                            </td>
-                        </tr>
-                    `;
-                }
-
-                visitedCounterText.textContent = `${visitedCount} / ${currentData.length} Opened`;
-            }
-
-            // Batch Open All
-            batchOpenAllBtn.addEventListener('click', () => {
-                if (currentData.length === 0) {
-                    showToast("Please enter keywords first", "fa-circle-exclamation");
-                    return;
-                }
-
-                let openedCount = 0;
-                currentData.forEach((item, i) => {
-                    visitedSet.add(item.url);
-                    saveHistory(item.keyword);
-                    setTimeout(() => {
-                        window.open(item.url, '_blank');
-                    }, i * 150);
-                    openedCount++;
-                });
-
-                renderTable();
-                showToast(`Opened ${openedCount} search URLs in new tabs`, "fa-layer-group");
-            });
-
-            // Single Link Actions
-            window.copyText = function(text) {
-                copyToClipboard(text, "URL copied to clipboard!");
-            };
-
-            window.openAndCopy = function(url, keyword) {
-                visitedSet.add(url);
-                saveHistory(keyword);
-                copyToClipboard(url, "URL copied & search tab opened!");
-                window.open(url, '_blank');
-                renderTable();
-            };
-
-            function copyToClipboard(text, msg) {
-                const el = document.createElement('textarea');
-                el.value = text;
-                document.body.appendChild(el);
-                el.select();
-                try {
-                    document.execCommand('copy');
-                    showToast(msg);
-                } catch (e) {
-                    showToast("Copy failed", "fa-circle-xmark");
-                }
-                document.body.removeChild(el);
-            }
-
-            function showToast(msg, icon = "fa-circle-check") {
-                toastMessage.textContent = msg;
-                document.getElementById('toastIcon').className = `fa-solid ${icon} text-emerald-400`;
-                toast.classList.remove('-translate-y-12', 'opacity-0');
-                toast.classList.add('translate-y-0', 'opacity-100');
-                
-                setTimeout(() => {
-                    toast.classList.remove('translate-y-0', 'opacity-100');
-                    toast.classList.add('-translate-y-12', 'opacity-0');
-                }, 2200);
-            }
-
-            // Export CSV
-            exportCsvBtn.addEventListener('click', () => {
-                if (currentData.length === 0) return;
-                let csvContent = "data:text/csv;charset=utf-8,Keyword,Query,HL,GL,URL,Status\n";
-                currentData.forEach(d => {
-                    const status = visitedSet.has(d.url) ? "Visited" : "Pending";
-                    csvContent += `"${d.keyword}","${d.query}","${d.hl}","${d.gl}","${d.url}","${status}"\n`;
-                });
-                const encodedUri = encodeURI(csvContent);
-                const link = document.createElement("a");
-                link.setAttribute("href", encodedUri);
-                link.setAttribute("download", `google_urls_${new Date().toISOString().slice(0,10)}.csv`);
-                document.body.appendChild(link);
-                link.click();
-                document.body.removeChild(link);
-            });
-
-            // Local History
-            function saveHistory(kw) {
-                if (!kw) return;
-                let history = JSON.parse(localStorage.getItem('g_search_hist_en') || '[]');
-                history = history.filter(h => h.toLowerCase() !== kw.toLowerCase());
-                history.unshift(kw);
-                if (history.length > 8) history = history.slice(0, 8);
-                localStorage.setItem('g_search_hist_en', JSON.stringify(history));
-                renderHistory();
-            }
-
-            function renderHistory() {
-                const history = JSON.parse(localStorage.getItem('g_search_hist_en') || '[]');
-                historyList.innerHTML = '';
-                if (history.length === 0) {
-                    historyList.innerHTML = '<span class="text-slateSubtle italic text-[11px]">No history saved</span>';
-                    return;
-                }
-                history.forEach(item => {
-                    const btn = document.createElement('button');
-                    btn.className = 'px-2 py-0.5 bg-lavenderMuted hover:bg-lavenderBorder text-slateViolet rounded text-[11px] font-mono border border-lavenderBorder transition';
-                    btn.textContent = item;
-                    btn.onclick = () => {
-                        const val = keywordInput.value.trim();
-                        if (!val) keywordInput.value = item;
-                        else if (!val.split('\n').includes(item)) keywordInput.value += '\n' + item;
-                        rebuildTable();
-                    };
-                    historyList.appendChild(btn);
-                });
-            }
-
-            clearHistoryBtn.addEventListener('click', () => {
-                localStorage.removeItem('g_search_hist_en');
-                renderHistory();
-            });
-
-            function escapeHtml(str) {
-                return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
-            }
-
-            // Init
-            renderHistory();
-            rebuildTable();
-        });
-    </script>
+$('presets').addEventListener('click',e=>{const b=e.target.closest('[data-p]');if(!b)return;const[,h,g]=PRESETS[b.dataset.p];hl.value=h;gl.value=g;rebuild()});
+$('chips').addEventListener('click',e=>{const b=e.target.closest('[data-c]');if(!b)return;chipFns[b.dataset.c][1]();rebuild()});
+$('list').addEventListener('click',e=>{
+  const b=e.target.closest('[data-a]');if(!b)return;const li=b.closest('li'),it=items[li.dataset.i];
+  if(b.dataset.a==='copy')copy(it.url,'Link copied.');
+  else if(b.dataset.a==='show')li.querySelector('.url').classList.toggle('hidden');
+  else{if(!openUrl(it))return toast('Pop-up blocked. Allow pop-ups for this page and try again.',1);saveVisited();render()}});
+$('hist').addEventListener('click',e=>{const b=e.target.closest('[data-h]');if(!b)return;const k=b.dataset.h,cur=kw.value.split('\n').map(s=>s.trim());if(!cur.includes(k)){kw.value=(kw.value.trim()?kw.value.replace(/\s+$/,'')+'\n':'')+k;rebuild()}});
+$('tabs').addEventListener('click',e=>{const b=e.target.closest('[data-f]');if(b){filter=b.dataset.f;render()}});
+[kw,hl,gl,hlc,glc,tbm,tf,num,site,inurl,intitle,ft,exact,pws].forEach(el=>{el.addEventListener('input',rebuild);el.addEventListener('change',rebuild)});
+$('q').addEventListener('input',render);
+$('demo').onclick=()=>{kw.value='foto mit musik hinterlegen\nbilder mit musik unterlegen\ndiashow mit musik erstellen';rebuild()};
+$('clear').onclick=()=>{kw.value='';rebuild();kw.focus()};
+$('next').onclick=openNext;$('all').onclick=openAll;$('csv').onclick=exportCsv;
+$('copyAll').onclick=()=>items.length?copy(items.map(i=>i.url).join('\n'),`${items.length} link${items.length===1?'':'s'} copied.`):toast('Nothing to copy.',1);
+$('reset').onclick=()=>{visited.clear();saveVisited();render();toast('Status reset.')};
+$('clearHist').onclick=()=>{store.set('gsug_history',[]);renderHist()};
+document.addEventListener('keydown',e=>{if((e.ctrlKey||e.metaKey)&&e.key==='Enter'){e.preventDefault();openNext()}});
+renderHist();rebuild();
+</script>
 </body>
 </html>
