@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="de">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,126 +9,137 @@
     <!-- Font Awesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Google Fonts Inter -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    
     <script>
         tailwind.config = {
             theme: {
                 extend: {
                     fontFamily: {
                         sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
                     },
                     colors: {
-                        purplebg: '#f5f3ff',
-                        glassbg: 'rgba(255, 255, 255, 0.75)',
-                        purpleaccent: '#7c3aed',
-                        purpleaccenthover: '#6d28d9',
-                        textmain: '#1e1b4b',
-                        textmuted: '#4c1d95',
+                        lavenderBg: '#F9F8FC',
+                        lavenderCard: 'rgba(255, 255, 255, 0.85)',
+                        lavenderMuted: '#F3F0F9',
+                        lavenderBorder: '#E2DDF0',
+                        lavenderAccent: '#7E69AB',
+                        lavenderAccentHover: '#685393',
+                        lavenderSoftAccent: '#9A82C7',
+                        slateViolet: '#2D283D',
+                        slateSubtle: '#686177',
                     },
                     boxShadow: {
-                        'soft-glass': '0 8px 30px rgba(124, 58, 237, 0.08)',
-                        'purple-glow': '0 4px 14px rgba(124, 58, 237, 0.25)',
+                        'soft-lavender': '0 4px 20px -2px rgba(126, 105, 171, 0.08)',
+                        'glow-purple': '0 2px 10px rgba(126, 105, 171, 0.2)',
                     }
                 }
             }
         }
     </script>
+
     <style>
         body {
-            background: linear-gradient(135deg, #f5f3ff 0%, #ede9fe 50%, #f3e8ff 100%);
-            min-height: 100vh;
-            color: #1e1b4b;
+            background-color: #F9F8FC;
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(243, 240, 249, 0.8) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(226, 221, 240, 0.5) 0px, transparent 50%);
+            background-attachment: fixed;
+            color: #2D283D;
         }
-        .glass-card {
-            background: rgba(255, 255, 255, 0.75);
+
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.85);
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
-            border: 1px solid rgba(196, 181, 253, 0.5);
-            box-shadow: 0 4px 20px rgba(124, 58, 237, 0.05);
+            border: 1px solid #E2DDF0;
+            box-shadow: 0 4px 20px -2px rgba(126, 105, 171, 0.06);
         }
+
         .glass-input {
-            background: rgba(255, 255, 255, 0.9);
-            border: 1px solid rgba(167, 139, 250, 0.4);
-            color: #1e1b4b;
+            background: rgba(255, 255, 255, 0.95);
+            border: 1px solid #E2DDF0;
+            color: #2D283D;
             transition: all 0.2s ease;
         }
+
         .glass-input:focus {
-            border-color: #7c3aed;
-            box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.15);
+            border-color: #7E69AB;
+            box-shadow: 0 0 0 3px rgba(126, 105, 171, 0.15);
             outline: none;
         }
 
-        /* Visited Row Styling */
+        /* Visited Row Visual Dimming */
         tr.row-visited {
-            background-color: rgba(237, 233, 254, 0.4) !important;
-            opacity: 0.75;
+            background-color: rgba(243, 240, 249, 0.6) !important;
         }
         tr.row-visited td {
-            color: #6b21a8;
+            color: #686177;
         }
 
-        /* Scrollbar */
+        /* Custom Scrollbar */
         ::-webkit-scrollbar {
             width: 6px;
             height: 6px;
         }
         ::-webkit-scrollbar-track {
-            background: rgba(237, 233, 254, 0.5);
+            background: #F3F0F9;
         }
         ::-webkit-scrollbar-thumb {
-            background: rgba(167, 139, 250, 0.6);
+            background: #C3B9DD;
             border-radius: 3px;
         }
         ::-webkit-scrollbar-thumb:hover {
-            background: rgba(124, 58, 237, 0.8);
+            background: #7E69AB;
         }
     </style>
 </head>
-<body class="font-sans antialiased text-xs md:text-sm p-3 md:p-6">
+<body class="font-sans antialiased text-xs md:text-sm p-3 md:p-5">
 
-    <div class="max-w-7xl mx-auto space-y-4">
+    <div class="max-w-7xl mx-auto space-y-3">
         
         <!-- Compact Header -->
-        <header class="glass-card px-4 py-2.5 rounded-xl flex items-center justify-between border border-purple-200">
+        <header class="glass-panel px-4 py-2.5 rounded-xl flex items-center justify-between">
             <div class="flex items-center space-x-2.5">
-                <div class="w-8 h-8 rounded-lg bg-purple-600 text-white flex items-center justify-center shadow-purple-glow">
-                    <i class="fa-solid fa-magnifying-glass-location text-sm"></i>
+                <div class="w-8 h-8 rounded-lg bg-lavenderAccent text-white flex items-center justify-center shadow-glow-purple">
+                    <i class="fa-solid fa-magnifying-glass text-sm"></i>
                 </div>
                 <div>
-                    <h1 class="text-base font-bold text-indigo-950 leading-tight">Google Search URL Generator</h1>
-                    <p class="text-[11px] text-purple-700">Multi-Region & SEO URL Suite &bull; Automatische Kopierfunktion</p>
+                    <h1 class="text-base font-bold text-slateViolet leading-tight tracking-tight">Google Search URL Generator</h1>
+                    <p class="text-[11px] text-slateSubtle">Multi-Region & SEO URL Suite &bull; Low-Saturation Lavender Theme</p>
                 </div>
             </div>
 
             <div class="flex items-center space-x-2">
-                <span id="summaryBadge" class="px-2.5 py-1 bg-purple-100 text-purple-800 rounded-lg text-xs font-semibold border border-purple-200">
-                    0 Begriffe
+                <span id="summaryBadge" class="px-2.5 py-1 bg-lavenderMuted text-slateViolet font-medium rounded-lg text-xs border border-lavenderBorder">
+                    0 Queries
                 </span>
             </div>
         </header>
 
         <!-- Notification Toast -->
         <div id="toast" class="fixed top-4 right-4 z-50 transform -translate-y-12 opacity-0 transition-all duration-300 pointer-events-none">
-            <div class="bg-indigo-950 text-white px-4 py-2.5 rounded-xl shadow-xl flex items-center space-x-2 text-xs font-medium">
+            <div class="bg-slateViolet text-white px-4 py-2.5 rounded-xl shadow-xl flex items-center space-x-2 text-xs font-medium">
                 <i id="toastIcon" class="fa-solid fa-circle-check text-emerald-400"></i>
-                <span id="toastMessage">In Zwischenablage kopiert</span>
+                <span id="toastMessage">Copied to clipboard</span>
             </div>
         </div>
 
-        <!-- Controls Section: Grid Layout -->
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-4">
+        <!-- Main Configuration Area -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-3">
             
-            <!-- Left Area: Batch Input -->
-            <div class="lg:col-span-5 flex flex-col space-y-3">
-                <div class="glass-card p-3.5 rounded-xl flex-1 flex flex-col space-y-2">
+            <!-- Left Panel: Batch Keyword Input -->
+            <div class="lg:col-span-5 flex flex-col space-y-2">
+                <div class="glass-panel p-3 rounded-xl flex-1 flex flex-col space-y-2">
                     <div class="flex justify-between items-center">
-                        <label for="keywordInput" class="font-semibold text-indigo-950 flex items-center gap-1.5 text-xs">
-                            <i class="fa-solid fa-list-ul text-purple-600"></i>
-                            Suchbegriffe (1 pro Zeile)
+                        <label for="keywordInput" class="font-semibold text-slateViolet flex items-center gap-1.5 text-xs">
+                            <i class="fa-solid fa-list-ul text-lavenderAccent"></i>
+                            Keywords List (One per line)
                         </label>
                         <div class="space-x-1">
-                            <button id="loadDemoBtn" class="text-[11px] px-2 py-0.5 rounded bg-purple-100 text-purple-700 hover:bg-purple-200 transition">Demo</button>
-                            <button id="clearKeywordsBtn" class="text-[11px] px-2 py-0.5 rounded bg-slate-100 text-slate-600 hover:bg-slate-200 transition">Leeren</button>
+                            <button id="loadDemoBtn" class="text-[11px] px-2 py-0.5 rounded bg-lavenderMuted text-slateViolet hover:bg-lavenderBorder transition">Load Demo</button>
+                            <button id="clearKeywordsBtn" class="text-[11px] px-2 py-0.5 rounded bg-white text-slateSubtle border border-lavenderBorder hover:bg-lavenderMuted transition">Clear</button>
                         </div>
                     </div>
                     
@@ -136,103 +147,147 @@
                         id="keywordInput" 
                         rows="7" 
                         class="w-full glass-input rounded-lg p-2.5 text-xs font-mono resize-none flex-1" 
-                        placeholder="ki werbung beispiele&#10;seo tipps 2026&#10;content marketing strategie"
-                    >ki werbung beispiele
-seo tipps 2026</textarea>
+                        placeholder="ai marketing tools&#10;seo audit checklist 2026&#10;content strategy template"
+                    >ai marketing tools
+seo audit checklist 2026</textarea>
                 </div>
             </div>
 
-            <!-- Right Area: Parameters & Filters -->
-            <div class="lg:col-span-7 space-y-3">
-                <div class="glass-card p-3.5 rounded-xl space-y-3">
+            <!-- Right Panel: Parameters & Options -->
+            <div class="lg:col-span-7 space-y-2">
+                <div class="glass-panel p-3 rounded-xl space-y-2.5">
                     
-                    <!-- Region Presets -->
-                    <div>
-                        <label class="block text-[11px] font-semibold text-indigo-950 mb-1 flex items-center gap-1">
-                            <i class="fa-solid fa-earth-europe text-purple-600"></i> Region / Sprache Preset
-                        </label>
-                        <div class="grid grid-cols-2 sm:grid-cols-4 gap-1.5">
-                            <select id="presetSelect" class="col-span-2 sm:col-span-3 glass-input rounded-lg p-1.5 text-xs font-medium cursor-pointer">
-                                <optgroup label="DACH-Raum">
-                                    <option value="de|de" selected>Deutschland (DE / de)</option>
-                                    <option value="de|at">Österreich (AT / de)</option>
-                                    <option value="de|ch">Schweiz (CH / de)</option>
-                                </optgroup>
-                                <optgroup label="Europa">
-                                    <option value="es|es">Spanien (ES / es)</option>
-                                    <option value="fr|fr">Frankreich (FR / fr)</option>
-                                    <option value="it|it">Italien (IT / it)</option>
-                                    <option value="en|gb">Großbritannien (UK / en)</option>
-                                </optgroup>
-                                <optgroup label="Global">
-                                    <option value="en|us">USA (US / en)</option>
-                                    <option value="zh-CN|cn">China (CN / zh-CN)</option>
-                                    <option value="zh-TW|tw">Taiwan (TW / zh-TW)</option>
-                                    <option value="ja|jp">Japan (JP / ja)</option>
-                                </optgroup>
-                                <option value="custom">Benutzerdefiniert...</option>
-                            </select>
-
-                            <!-- Custom Inline Inputs -->
-                            <div class="flex items-center space-x-1">
-                                <input type="text" id="hlInput" value="de" placeholder="hl" class="w-1/2 glass-input rounded-lg p-1.5 text-xs text-center font-mono">
-                                <input type="text" id="glInput" value="de" placeholder="gl" class="w-1/2 glass-input rounded-lg p-1.5 text-xs text-center font-mono">
-                            </div>
+                    <!-- Presets Toolbar -->
+                    <div class="flex items-center justify-between pb-2 border-b border-lavenderBorder">
+                        <span class="text-[11px] font-semibold text-slateViolet flex items-center gap-1">
+                            <i class="fa-solid fa-bolt text-lavenderAccent"></i> Quick Region Clusters:
+                        </span>
+                        <div class="flex flex-wrap gap-1">
+                            <button type="button" class="preset-btn px-2 py-0.5 rounded bg-white hover:bg-lavenderMuted border border-lavenderBorder text-[11px] font-medium text-slateViolet transition" data-hl="de" data-gl="de">DACH (DE)</button>
+                            <button type="button" class="preset-btn px-2 py-0.5 rounded bg-white hover:bg-lavenderMuted border border-lavenderBorder text-[11px] font-medium text-slateViolet transition" data-hl="en" data-gl="us">US / Global</button>
+                            <button type="button" class="preset-btn px-2 py-0.5 rounded bg-white hover:bg-lavenderMuted border border-lavenderBorder text-[11px] font-medium text-slateViolet transition" data-hl="en" data-gl="gb">UK (GB)</button>
+                            <button type="button" class="preset-btn px-2 py-0.5 rounded bg-white hover:bg-lavenderMuted border border-lavenderBorder text-[11px] font-medium text-slateViolet transition" data-hl="es" data-gl="es">ES / LATAM</button>
+                            <button type="button" class="preset-btn px-2 py-0.5 rounded bg-white hover:bg-lavenderMuted border border-lavenderBorder text-[11px] font-medium text-slateViolet transition" data-hl="zh-CN" data-gl="cn">China (CN)</button>
                         </div>
                     </div>
 
-                    <hr class="border-purple-200/60">
+                    <!-- Language & Region Selectors -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                        
+                        <!-- Language (hl) Select -->
+                        <div>
+                            <label for="hlSelect" class="block text-[11px] font-semibold text-slateViolet mb-1 flex items-center gap-1">
+                                <i class="fa-solid fa-language text-lavenderAccent"></i> Interface Language (hl)
+                            </label>
+                            <select id="hlSelect" class="w-full glass-input rounded-lg p-1.5 text-xs font-medium cursor-pointer">
+                                <option value="en" selected>English (en)</option>
+                                <option value="de">German (de)</option>
+                                <option value="es">Spanish (es)</option>
+                                <option value="fr">French (fr)</option>
+                                <option value="it">Italian (it)</option>
+                                <option value="zh-CN">Chinese Simplified (zh-CN)</option>
+                                <option value="zh-TW">Chinese Traditional (zh-TW)</option>
+                                <option value="ja">Japanese (ja)</option>
+                                <option value="ko">Korean (ko)</option>
+                                <option value="pt">Portuguese (pt)</option>
+                                <option value="ru">Russian (ru)</option>
+                                <option value="nl">Dutch (nl)</option>
+                                <option value="custom">Custom Code...</option>
+                            </select>
+                        </div>
 
-                    <!-- Compact SEO Operators Bar -->
-                    <div class="space-y-2">
-                        <label class="block text-[11px] font-semibold text-indigo-950 flex items-center gap-1">
-                            <i class="fa-solid fa-sliders text-purple-600"></i> SEO Filter & Operatoren
+                        <!-- Country/Region (gl) Select -->
+                        <div>
+                            <label for="glSelect" class="block text-[11px] font-semibold text-slateViolet mb-1 flex items-center gap-1">
+                                <i class="fa-solid fa-globe text-lavenderAccent"></i> Target Country / Region (gl)
+                            </label>
+                            <select id="glSelect" class="w-full glass-input rounded-lg p-1.5 text-xs font-medium cursor-pointer">
+                                <option value="us" selected>United States (US)</option>
+                                <option value="de">Germany (DE)</option>
+                                <option value="at">Austria (AT)</option>
+                                <option value="ch">Switzerland (CH)</option>
+                                <option value="gb">United Kingdom (GB)</option>
+                                <option value="es">Spain (ES)</option>
+                                <option value="mx">Mexico (MX)</option>
+                                <option value="cn">China (CN)</option>
+                                <option value="tw">Taiwan (TW)</option>
+                                <option value="hk">Hong Kong (HK)</option>
+                                <option value="fr">France (FR)</option>
+                                <option value="it">Italy (IT)</option>
+                                <option value="jp">Japan (JP)</option>
+                                <option value="custom">Custom Code...</option>
+                            </select>
+                        </div>
+
+                    </div>
+
+                    <!-- Custom Parameter Inputs (Hidden by default) -->
+                    <div id="customInputsRow" class="hidden grid-cols-2 gap-2 bg-lavenderMuted/60 p-2 rounded-lg border border-lavenderBorder">
+                        <div>
+                            <label class="text-[10px] text-slateSubtle font-semibold">Custom hl:</label>
+                            <input type="text" id="hlCustom" placeholder="e.g. pl" class="w-full glass-input rounded px-2 py-1 text-xs">
+                        </div>
+                        <div>
+                            <label class="text-[10px] text-slateSubtle font-semibold">Custom gl:</label>
+                            <input type="text" id="glCustom" placeholder="e.g. pl" class="w-full glass-input rounded px-2 py-1 text-xs">
+                        </div>
+                    </div>
+
+                    <!-- SEO Modifiers & Time Filters -->
+                    <div class="space-y-1.5">
+                        <label class="block text-[11px] font-semibold text-slateViolet flex items-center gap-1">
+                            <i class="fa-solid fa-sliders text-lavenderAccent"></i> SEO Modifiers & Filters
                         </label>
                         
-                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                        <div class="grid grid-cols-2 sm:grid-cols-3 gap-1.5">
                             <!-- Toggle Exact -->
-                            <label class="flex items-center space-x-2 bg-white/60 p-1.5 rounded-lg border border-purple-200/60 cursor-pointer">
-                                <input type="checkbox" id="exactMatch" class="w-3.5 h-3.5 rounded text-purple-600 focus:ring-purple-500">
-                                <span class="text-xs font-medium text-indigo-950">Exakt <code class="text-purple-700 font-bold">"..."</code></span>
+                            <label class="flex items-center space-x-2 bg-white p-1.5 rounded-lg border border-lavenderBorder cursor-pointer">
+                                <input type="checkbox" id="exactMatch" class="w-3.5 h-3.5 rounded text-lavenderAccent focus:ring-lavenderAccent">
+                                <span class="text-xs font-medium text-slateViolet">Exact <code class="text-lavenderAccent font-bold">"..."</code></span>
                             </label>
 
-                            <!-- Site Filter -->
-                            <div class="flex items-center space-x-1 bg-white/60 p-1.5 rounded-lg border border-purple-200/60">
-                                <input type="checkbox" id="siteToggle" class="w-3.5 h-3.5 rounded text-purple-600 focus:ring-purple-500">
-                                <span class="text-xs font-medium text-indigo-950 min-w-[28px]">site:</span>
-                                <input type="text" id="siteVal" placeholder="z.B. youtube.com" disabled class="w-full glass-input rounded px-1.5 py-0.5 text-[11px] font-mono disabled:opacity-40">
+                            <!-- Site Constraint -->
+                            <div class="flex items-center space-x-1 bg-white p-1.5 rounded-lg border border-lavenderBorder">
+                                <input type="checkbox" id="siteToggle" class="w-3.5 h-3.5 rounded text-lavenderAccent focus:ring-lavenderAccent">
+                                <span class="text-xs font-medium text-slateViolet min-w-[26px]">site:</span>
+                                <input type="text" id="siteVal" placeholder="youtube.com" disabled class="w-full glass-input rounded px-1.5 py-0.5 text-[11px] font-mono disabled:opacity-40">
                             </div>
 
-                            <!-- Filetype Filter -->
-                            <div class="flex items-center space-x-1 bg-white/60 p-1.5 rounded-lg border border-purple-200/60">
-                                <input type="checkbox" id="filetypeToggle" class="w-3.5 h-3.5 rounded text-purple-600 focus:ring-purple-500">
-                                <span class="text-xs font-medium text-indigo-950 min-w-[38px]">file:</span>
-                                <input type="text" id="filetypeVal" value="pdf" disabled class="w-full glass-input rounded px-1.5 py-0.5 text-[11px] font-mono disabled:opacity-40">
+                            <!-- Filetype Constraint -->
+                            <div class="flex items-center space-x-1 bg-white p-1.5 rounded-lg border border-lavenderBorder">
+                                <input type="checkbox" id="filetypeToggle" class="w-3.5 h-3.5 rounded text-lavenderAccent focus:ring-lavenderAccent">
+                                <span class="text-xs font-medium text-slateViolet min-w-[32px]">file:</span>
+                                <select id="filetypeVal" disabled class="w-full glass-input rounded px-1 py-0.5 text-[11px] font-mono disabled:opacity-40">
+                                    <option value="pdf">pdf</option>
+                                    <option value="docx">docx</option>
+                                    <option value="pptx">pptx</option>
+                                    <option value="xlsx">xlsx</option>
+                                </select>
                             </div>
 
-                            <!-- InURL Filter -->
-                            <div class="flex items-center space-x-1 bg-white/60 p-1.5 rounded-lg border border-purple-200/60">
-                                <input type="checkbox" id="inurlToggle" class="w-3.5 h-3.5 rounded text-purple-600 focus:ring-purple-500">
-                                <span class="text-xs font-medium text-indigo-950 min-w-[38px]">inurl:</span>
+                            <!-- InURL Constraint -->
+                            <div class="flex items-center space-x-1 bg-white p-1.5 rounded-lg border border-lavenderBorder">
+                                <input type="checkbox" id="inurlToggle" class="w-3.5 h-3.5 rounded text-lavenderAccent focus:ring-lavenderAccent">
+                                <span class="text-xs font-medium text-slateViolet min-w-[32px]">inurl:</span>
                                 <input type="text" id="inurlVal" placeholder="blog..." disabled class="w-full glass-input rounded px-1.5 py-0.5 text-[11px] font-mono disabled:opacity-40">
                             </div>
 
-                            <!-- Intitle Filter -->
-                            <div class="flex items-center space-x-1 bg-white/60 p-1.5 rounded-lg border border-purple-200/60">
-                                <input type="checkbox" id="intitleToggle" class="w-3.5 h-3.5 rounded text-purple-600 focus:ring-purple-500">
-                                <span class="text-xs font-medium text-indigo-950 min-w-[38px]">title:</span>
+                            <!-- Intitle Constraint -->
+                            <div class="flex items-center space-x-1 bg-white p-1.5 rounded-lg border border-lavenderBorder">
+                                <input type="checkbox" id="intitleToggle" class="w-3.5 h-3.5 rounded text-lavenderAccent focus:ring-lavenderAccent">
+                                <span class="text-xs font-medium text-slateViolet min-w-[32px]">title:</span>
                                 <input type="text" id="intitleVal" placeholder="guide..." disabled class="w-full glass-input rounded px-1.5 py-0.5 text-[11px] font-mono disabled:opacity-40">
                             </div>
 
                             <!-- Time Filter -->
-                            <div class="flex items-center space-x-1 bg-white/60 p-1.5 rounded-lg border border-purple-200/60">
-                                <span class="text-xs font-medium text-indigo-950 min-w-[28px]"><i class="fa-regular fa-clock text-purple-600"></i></span>
+                            <div class="flex items-center space-x-1 bg-white p-1.5 rounded-lg border border-lavenderBorder">
+                                <span class="text-xs font-medium text-slateViolet shrink-0"><i class="fa-regular fa-clock text-lavenderAccent"></i></span>
                                 <select id="timeFilter" class="w-full glass-input rounded px-1 py-0.5 text-[11px] cursor-pointer">
-                                    <option value="">Zeitraum: Alle</option>
-                                    <option value="qdr:d">24 Std. (qdr:d)</option>
-                                    <option value="qdr:w">1 Woche (qdr:w)</option>
-                                    <option value="qdr:m">1 Monat (qdr:m)</option>
-                                    <option value="qdr:y">1 Jahr (qdr:y)</option>
+                                    <option value="">Time: Any time</option>
+                                    <option value="qdr:d">Past 24 hours</option>
+                                    <option value="qdr:w">Past week</option>
+                                    <option value="qdr:m">Past month</option>
+                                    <option value="qdr:y">Past year</option>
                                 </select>
                             </div>
                         </div>
@@ -243,81 +298,91 @@ seo tipps 2026</textarea>
 
         </div>
 
-        <!-- Main Results Area: Direct Table View -->
-        <div class="glass-card p-4 rounded-xl space-y-3">
+        <!-- Output & Results Section -->
+        <div class="glass-panel p-3.5 rounded-xl space-y-2.5">
             
-            <!-- Table Action Toolbar -->
-            <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 pb-2 border-b border-purple-200/60">
-                <div class="flex items-center space-x-1 bg-purple-100/70 p-1 rounded-lg border border-purple-200">
-                    <button id="filterAllBtn" class="px-2.5 py-1 text-xs font-medium rounded-md bg-white text-purple-900 shadow-sm">Alle</button>
-                    <button id="filterUnvisitedBtn" class="px-2.5 py-1 text-xs font-medium rounded-md text-purple-700 hover:bg-white/50">Offen</button>
-                    <button id="filterVisitedBtn" class="px-2.5 py-1 text-xs font-medium rounded-md text-purple-700 hover:bg-white/50">Geöffnet</button>
+            <!-- Table Actions Toolbar -->
+            <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 pb-2 border-b border-lavenderBorder">
+                <div class="flex items-center space-x-2">
+                    <div class="flex items-center space-x-1 bg-lavenderMuted p-1 rounded-lg border border-lavenderBorder">
+                        <button id="filterAllBtn" class="px-2.5 py-1 text-xs font-medium rounded-md bg-white text-slateViolet shadow-sm">All</button>
+                        <button id="filterUnvisitedBtn" class="px-2.5 py-1 text-xs font-medium rounded-md text-slateSubtle hover:bg-white/50">Pending</button>
+                        <button id="filterVisitedBtn" class="px-2.5 py-1 text-xs font-medium rounded-md text-slateSubtle hover:bg-white/50">Visited</button>
+                    </div>
+
+                    <!-- Prominent Batch Open Button -->
+                    <button id="batchOpenAllBtn" class="px-3 py-1.5 rounded-lg bg-lavenderAccent hover:bg-lavenderAccentHover text-white font-semibold text-xs shadow-glow-purple transition flex items-center gap-1.5">
+                        <i class="fa-solid fa-layer-group"></i>
+                        <span>Open All Links</span>
+                    </button>
                 </div>
 
                 <div class="flex items-center gap-2 w-full sm:w-auto justify-end">
-                    <input type="text" id="tableSearch" placeholder="Tabelle durchsuchen..." class="glass-input rounded-lg px-2.5 py-1 text-xs w-36 sm:w-48">
+                    <input type="text" id="tableSearch" placeholder="Search query or URL..." class="glass-input rounded-lg px-2.5 py-1 text-xs w-36 sm:w-44">
                     
-                    <button id="exportCsvBtn" class="px-2.5 py-1 rounded-lg bg-white hover:bg-purple-50 text-indigo-900 border border-purple-200 text-xs font-medium transition flex items-center gap-1">
-                        <i class="fa-solid fa-file-csv text-purple-600"></i> Export
+                    <button id="exportCsvBtn" class="px-2.5 py-1 rounded-lg bg-white hover:bg-lavenderMuted text-slateViolet border border-lavenderBorder text-xs font-medium transition flex items-center gap-1">
+                        <i class="fa-solid fa-file-csv text-lavenderAccent"></i> Export CSV
                     </button>
                     
-                    <button id="resetVisitedBtn" class="px-2.5 py-1 rounded-lg bg-white hover:bg-purple-50 text-slate-700 border border-purple-200 text-xs font-medium transition flex items-center gap-1" title="Klick-Status zurücksetzen">
-                        <i class="fa-solid fa-rotate-left text-slate-500"></i> Reset
+                    <button id="resetVisitedBtn" class="px-2 py-1 rounded-lg bg-white hover:bg-lavenderMuted text-slateSubtle border border-lavenderBorder text-xs font-medium transition flex items-center gap-1" title="Reset Visited State">
+                        <i class="fa-solid fa-rotate-left text-slateSubtle"></i> Reset Status
                     </button>
                 </div>
             </div>
 
-            <!-- Table Container -->
-            <div class="overflow-x-auto max-h-[480px] overflow-y-auto rounded-lg border border-purple-200/80 bg-white/80">
+            <!-- Table View -->
+            <div class="overflow-x-auto max-h-[460px] overflow-y-auto rounded-lg border border-lavenderBorder bg-white">
                 <table class="w-full text-left border-collapse">
-                    <thead class="bg-purple-100/90 sticky top-0 z-10 text-[11px] font-bold text-indigo-950 uppercase border-b border-purple-200">
+                    <thead class="bg-lavenderMuted sticky top-0 z-10 text-[11px] font-bold text-slateViolet uppercase border-b border-lavenderBorder">
                         <tr>
-                            <th class="py-2 px-3 w-12 text-center">#</th>
-                            <th class="py-2 px-3 w-28">Status</th>
-                            <th class="py-2 px-3">Keyword & Query</th>
+                            <th class="py-2 px-3 w-10 text-center">#</th>
+                            <th class="py-2 px-3 w-24">Status</th>
+                            <th class="py-2 px-3">Keyword & Query String</th>
                             <th class="py-2 px-3 w-20 text-center">Target</th>
-                            <th class="py-2 px-3">Google Search URL (Klick = Kopieren)</th>
-                            <th class="py-2 px-3 w-24 text-center">Aktion</th>
+                            <th class="py-2 px-3">Generated Google Search URL</th>
+                            <th class="py-2 px-3 w-24 text-center">Action</th>
                         </tr>
                     </thead>
-                    <tbody id="tableBody" class="divide-y divide-purple-100 text-xs">
-                        <!-- Dynamic Rows Here -->
+                    <tbody id="tableBody" class="divide-y divide-lavenderBorder text-xs">
+                        <!-- Dynamic Rows -->
                     </tbody>
                 </table>
             </div>
 
-            <div class="text-[11px] text-slate-500 flex justify-between items-center px-1">
-                <span><i class="fa-solid fa-circle-info text-purple-500"></i> Hinweistext: Beim Klicken auf <b>"Öffnen"</b> wird die URL direkt in ein neues Tab geöffnet und gleichzeitig kopiert.</span>
-                <span id="visitedCounterText" class="font-medium text-purple-900">0 / 0 geöffnet</span>
+            <div class="text-[11px] text-slateSubtle flex flex-col sm:flex-row justify-between items-start sm:items-center gap-1 px-1">
+                <span><i class="fa-solid fa-circle-info text-lavenderAccent"></i> Clicking <b>"Open"</b> or the <b>URL link</b> launches Google search & automatically copies the URL. Please allow popups for batch opening.</span>
+                <span id="visitedCounterText" class="font-medium text-slateViolet">0 / 0 Opened</span>
             </div>
 
         </div>
 
-        <!-- Local History Footer -->
-        <div class="glass-card p-3 rounded-xl flex items-center justify-between text-xs">
+        <!-- History Footer -->
+        <div class="glass-panel p-2.5 rounded-xl flex items-center justify-between text-xs">
             <div class="flex items-center space-x-2 overflow-x-auto py-0.5">
-                <span class="font-semibold text-indigo-950 shrink-0"><i class="fa-solid fa-history text-purple-600"></i> Verlauf:</span>
+                <span class="font-semibold text-slateViolet shrink-0"><i class="fa-solid fa-clock-rotate-left text-lavenderAccent"></i> Recent Queries:</span>
                 <div id="historyList" class="flex items-center space-x-1.5">
-                    <span class="text-slate-400 italic text-[11px]">Kein Verlauf vorhanden</span>
+                    <span class="text-slateSubtle italic text-[11px]">No history saved</span>
                 </div>
             </div>
-            <button id="clearHistoryBtn" class="text-[11px] text-slate-400 hover:text-purple-700 shrink-0 ml-2">Löschen</button>
+            <button id="clearHistoryBtn" class="text-[11px] text-slateSubtle hover:text-slateViolet shrink-0 ml-2">Clear History</button>
         </div>
 
     </div>
 
-    <!-- Application Script -->
+    <!-- Application JavaScript Logic -->
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            // Elements
+            // DOM Elements
             const keywordInput = document.getElementById('keywordInput');
             const loadDemoBtn = document.getElementById('loadDemoBtn');
             const clearKeywordsBtn = document.getElementById('clearKeywordsBtn');
             const summaryBadge = document.getElementById('summaryBadge');
 
-            const presetSelect = document.getElementById('presetSelect');
-            const hlInput = document.getElementById('hlInput');
-            const glInput = document.getElementById('glInput');
+            const hlSelect = document.getElementById('hlSelect');
+            const glSelect = document.getElementById('glSelect');
+            const customInputsRow = document.getElementById('customInputsRow');
+            const hlCustom = document.getElementById('hlCustom');
+            const glCustom = document.getElementById('glCustom');
 
             const exactMatch = document.getElementById('exactMatch');
             const siteToggle = document.getElementById('siteToggle');
@@ -330,6 +395,7 @@ seo tipps 2026</textarea>
             const intitleVal = document.getElementById('intitleVal');
             const timeFilter = document.getElementById('timeFilter');
 
+            const batchOpenAllBtn = document.getElementById('batchOpenAllBtn');
             const tableBody = document.getElementById('tableBody');
             const tableSearch = document.getElementById('tableSearch');
             const visitedCounterText = document.getElementById('visitedCounterText');
@@ -349,24 +415,44 @@ seo tipps 2026</textarea>
             // State
             let visitedSet = new Set();
             let currentData = [];
-            let activeFilter = 'all'; // 'all', 'unvisited', 'visited'
+            let activeFilter = 'all';
 
-            // Presets
-            presetSelect.addEventListener('change', (e) => {
-                if (e.target.value !== 'custom') {
-                    const [hl, gl] = e.target.value.split('|');
-                    hlInput.value = hl;
-                    glInput.value = gl;
+            // Check Custom Row Visibility
+            function checkCustomRow() {
+                if (hlSelect.value === 'custom' || glSelect.value === 'custom') {
+                    customInputsRow.classList.remove('hidden');
+                    customInputsRow.classList.add('grid');
+                } else {
+                    customInputsRow.classList.add('hidden');
+                    customInputsRow.classList.remove('grid');
                 }
-                rebuildTable();
+            }
+
+            [hlSelect, glSelect].forEach(select => {
+                select.addEventListener('change', () => {
+                    checkCustomRow();
+                    rebuildTable();
+                });
             });
 
-            [hlInput, glInput].forEach(i => i.addEventListener('input', () => {
-                presetSelect.value = 'custom';
-                rebuildTable();
-            }));
+            [hlCustom, glCustom].forEach(input => {
+                input.addEventListener('input', rebuildTable);
+            });
 
-            // Toggle Toggles
+            // Preset Cluster Handler
+            document.querySelectorAll('.preset-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const hl = btn.dataset.hl;
+                    const gl = btn.dataset.gl;
+                    hlSelect.value = hl;
+                    glSelect.value = gl;
+                    checkCustomRow();
+                    rebuildTable();
+                    showToast(`Switched region preset to ${hl.toUpperCase()}-${gl.toUpperCase()}`);
+                });
+            });
+
+            // Toggle Input Binds
             const bindToggle = (toggle, input) => {
                 toggle.addEventListener('change', (e) => {
                     input.disabled = !e.target.checked;
@@ -374,6 +460,7 @@ seo tipps 2026</textarea>
                     rebuildTable();
                 });
                 input.addEventListener('input', rebuildTable);
+                input.addEventListener('change', rebuildTable);
             };
 
             bindToggle(siteToggle, siteVal);
@@ -395,29 +482,39 @@ seo tipps 2026</textarea>
             });
 
             loadDemoBtn.addEventListener('click', () => {
-                keywordInput.value = "ki werbung beispiele\ncorpse bride makeup\ncontent marketing strategy 2026";
+                keywordInput.value = "ai marketing tools\nseo audit checklist 2026\ncontent strategy template";
                 rebuildTable();
             });
 
             resetVisitedBtn.addEventListener('click', () => {
                 visitedSet.clear();
                 renderTable();
-                showToast("Klick-Status zurückgesetzt", "fa-rotate-left");
+                showToast("Reset all visited statuses", "fa-rotate-left");
             });
 
-            // Status Filter Tabs
+            // Filter Tabs
             const setTabActive = (btn) => {
                 [filterAllBtn, filterUnvisitedBtn, filterVisitedBtn].forEach(b => {
-                    b.className = "px-2.5 py-1 text-xs font-medium rounded-md text-purple-700 hover:bg-white/50";
+                    b.className = "px-2.5 py-1 text-xs font-medium rounded-md text-slateSubtle hover:bg-white/50";
                 });
-                btn.className = "px-2.5 py-1 text-xs font-medium rounded-md bg-white text-purple-900 shadow-sm";
+                btn.className = "px-2.5 py-1 text-xs font-medium rounded-md bg-white text-slateViolet shadow-sm";
             };
 
             filterAllBtn.addEventListener('click', () => { activeFilter = 'all'; setTabActive(filterAllBtn); renderTable(); });
             filterUnvisitedBtn.addEventListener('click', () => { activeFilter = 'unvisited'; setTabActive(filterUnvisitedBtn); renderTable(); });
             filterVisitedBtn.addEventListener('click', () => { activeFilter = 'visited'; setTabActive(filterVisitedBtn); renderTable(); });
 
-            // Build Item URL
+            // Resolve hl and gl
+            function getHlGl() {
+                let hl = hlSelect.value === 'custom' ? hlCustom.value.trim() : hlSelect.value;
+                let gl = glSelect.value === 'custom' ? glCustom.value.trim() : glSelect.value;
+                return {
+                    hl: hl || 'en',
+                    gl: gl || 'us'
+                };
+            }
+
+            // Build Individual Item URL
             function buildUrlItem(rawKw) {
                 let kw = rawKw.trim();
                 if (!kw) return null;
@@ -432,8 +529,7 @@ seo tipps 2026</textarea>
                 const params = new URLSearchParams();
                 params.set('q', q);
 
-                const hl = hlInput.value.trim() || 'de';
-                const gl = glInput.value.trim() || 'de';
+                const { hl, gl } = getHlGl();
                 params.set('hl', hl);
                 params.set('gl', gl);
 
@@ -450,7 +546,7 @@ seo tipps 2026</textarea>
 
             function rebuildTable() {
                 const lines = keywordInput.value.split('\n').map(l => l.trim()).filter(l => l.length > 0);
-                summaryBadge.textContent = `${lines.length} Begriff(e)`;
+                summaryBadge.textContent = `${lines.length} Queries`;
 
                 currentData = [];
                 lines.forEach(line => {
@@ -483,36 +579,36 @@ seo tipps 2026</textarea>
                     displayedCount++;
 
                     const tr = document.createElement('tr');
-                    tr.className = `hover:bg-purple-50/80 transition ${isVisited ? 'row-visited' : ''}`;
+                    tr.className = `hover:bg-lavenderMuted/50 transition ${isVisited ? 'row-visited' : ''}`;
 
                     tr.innerHTML = `
-                        <td class="py-2 px-3 font-mono text-slate-400 text-center text-[11px]">${idx + 1}</td>
+                        <td class="py-2 px-3 font-mono text-slateSubtle text-center text-[11px]">${idx + 1}</td>
                         <td class="py-2 px-3">
                             ${isVisited ? `
-                                <span class="inline-flex items-center gap-1 text-[10px] bg-emerald-100 text-emerald-800 font-semibold px-2 py-0.5 rounded-full border border-emerald-300">
-                                    <i class="fa-solid fa-check text-[9px]"></i> Geöffnet
+                                <span class="inline-flex items-center gap-1 text-[10px] bg-emerald-50 text-emerald-700 font-semibold px-2 py-0.5 rounded-full border border-emerald-200">
+                                    <i class="fa-solid fa-check text-[9px]"></i> Visited
                                 </span>
                             ` : `
-                                <span class="inline-flex items-center gap-1 text-[10px] bg-purple-100 text-purple-700 font-medium px-2 py-0.5 rounded-full border border-purple-200">
-                                    Offen
+                                <span class="inline-flex items-center gap-1 text-[10px] bg-lavenderMuted text-slateSubtle font-medium px-2 py-0.5 rounded-full border border-lavenderBorder">
+                                    Pending
                                 </span>
                             `}
                         </td>
-                        <td class="py-2 px-3 font-medium text-indigo-950">
+                        <td class="py-2 px-3 font-medium text-slateViolet">
                             <div>${escapeHtml(item.keyword)}</div>
-                            ${item.query !== item.keyword ? `<div class="text-[10px] text-purple-600 font-mono">${escapeHtml(item.query)}</div>` : ''}
+                            ${item.query !== item.keyword ? `<div class="text-[10px] text-lavenderAccent font-mono">${escapeHtml(item.query)}</div>` : ''}
                         </td>
                         <td class="py-2 px-3 text-center">
-                            <span class="bg-slate-100 text-slate-700 font-mono text-[10px] px-1.5 py-0.5 rounded border border-slate-200 uppercase">
+                            <span class="bg-lavenderMuted text-slateViolet font-mono text-[10px] px-1.5 py-0.5 rounded border border-lavenderBorder uppercase">
                                 ${escapeHtml(item.hl)}-${escapeHtml(item.gl)}
                             </span>
                         </td>
-                        <td class="py-2 px-3 font-mono text-[11px] text-purple-700 hover:text-purple-900 cursor-pointer max-w-xs truncate" title="Klicken um URL zu kopieren" onclick="copyText('${escapeHtml(item.url)}')">
-                            <span class="underline decoration-purple-300 underline-offset-2">${escapeHtml(item.url)}</span>
+                        <td class="py-2 px-3 font-mono text-[11px] text-lavenderAccent hover:text-lavenderAccentHover cursor-pointer max-w-xs truncate" title="Click to copy URL to clipboard" onclick="copyText('${escapeHtml(item.url)}')">
+                            <span class="underline decoration-lavenderSoftAccent underline-offset-2">${escapeHtml(item.url)}</span>
                         </td>
                         <td class="py-2 px-3 text-center">
-                            <button onclick="openAndCopy('${escapeHtml(item.url)}', '${escapeHtml(item.keyword)}')" class="px-2.5 py-1 rounded bg-purple-600 hover:bg-purple-700 text-white font-medium text-[11px] transition shadow-sm flex items-center justify-center gap-1 mx-auto">
-                                <span>Öffnen</span>
+                            <button onclick="openAndCopy('${escapeHtml(item.url)}', '${escapeHtml(item.keyword)}')" class="px-2.5 py-1 rounded bg-lavenderAccent hover:bg-lavenderAccentHover text-white font-medium text-[11px] transition shadow-sm flex items-center justify-center gap-1 mx-auto">
+                                <span>Open</span>
                                 <i class="fa-solid fa-arrow-up-right-from-square text-[9px]"></i>
                             </button>
                         </td>
@@ -524,25 +620,46 @@ seo tipps 2026</textarea>
                 if (displayedCount === 0) {
                     tableBody.innerHTML = `
                         <tr>
-                            <td colspan="6" class="py-8 text-center text-slate-400">
-                                Keine passenden Suchbegriffe oder URLs gefunden.
+                            <td colspan="6" class="py-8 text-center text-slateSubtle">
+                                No matching queries or generated URLs to display.
                             </td>
                         </tr>
                     `;
                 }
 
-                visitedCounterText.textContent = `${visitedCount} / ${currentData.length} geöffnet`;
+                visitedCounterText.textContent = `${visitedCount} / ${currentData.length} Opened`;
             }
 
-            // Copy & Open Actions
+            // Batch Open All
+            batchOpenAllBtn.addEventListener('click', () => {
+                if (currentData.length === 0) {
+                    showToast("Please enter keywords first", "fa-circle-exclamation");
+                    return;
+                }
+
+                let openedCount = 0;
+                currentData.forEach((item, i) => {
+                    visitedSet.add(item.url);
+                    saveHistory(item.keyword);
+                    setTimeout(() => {
+                        window.open(item.url, '_blank');
+                    }, i * 150);
+                    openedCount++;
+                });
+
+                renderTable();
+                showToast(`Opened ${openedCount} search URLs in new tabs`, "fa-layer-group");
+            });
+
+            // Single Link Actions
             window.copyText = function(text) {
-                copyToClipboard(text, "URL kopiert!");
+                copyToClipboard(text, "URL copied to clipboard!");
             };
 
             window.openAndCopy = function(url, keyword) {
                 visitedSet.add(url);
                 saveHistory(keyword);
-                copyToClipboard(url, "URL kopiert & Tab geöffnet!");
+                copyToClipboard(url, "URL copied & search tab opened!");
                 window.open(url, '_blank');
                 renderTable();
             };
@@ -556,7 +673,7 @@ seo tipps 2026</textarea>
                     document.execCommand('copy');
                     showToast(msg);
                 } catch (e) {
-                    showToast("Fehler beim Kopieren", "fa-circle-xmark");
+                    showToast("Copy failed", "fa-circle-xmark");
                 }
                 document.body.removeChild(el);
             }
@@ -573,18 +690,18 @@ seo tipps 2026</textarea>
                 }, 2200);
             }
 
-            // Export to CSV
+            // Export CSV
             exportCsvBtn.addEventListener('click', () => {
                 if (currentData.length === 0) return;
                 let csvContent = "data:text/csv;charset=utf-8,Keyword,Query,HL,GL,URL,Status\n";
                 currentData.forEach(d => {
-                    const status = visitedSet.has(d.url) ? "Geöffnet" : "Offen";
+                    const status = visitedSet.has(d.url) ? "Visited" : "Pending";
                     csvContent += `"${d.keyword}","${d.query}","${d.hl}","${d.gl}","${d.url}","${status}"\n`;
                 });
                 const encodedUri = encodeURI(csvContent);
                 const link = document.createElement("a");
                 link.setAttribute("href", encodedUri);
-                link.setAttribute("download", `google_search_urls_${new Date().toISOString().slice(0,10)}.csv`);
+                link.setAttribute("download", `google_urls_${new Date().toISOString().slice(0,10)}.csv`);
                 document.body.appendChild(link);
                 link.click();
                 document.body.removeChild(link);
@@ -593,24 +710,24 @@ seo tipps 2026</textarea>
             // Local History
             function saveHistory(kw) {
                 if (!kw) return;
-                let history = JSON.parse(localStorage.getItem('g_search_hist') || '[]');
+                let history = JSON.parse(localStorage.getItem('g_search_hist_en') || '[]');
                 history = history.filter(h => h.toLowerCase() !== kw.toLowerCase());
                 history.unshift(kw);
                 if (history.length > 8) history = history.slice(0, 8);
-                localStorage.setItem('g_search_hist', JSON.stringify(history));
+                localStorage.setItem('g_search_hist_en', JSON.stringify(history));
                 renderHistory();
             }
 
             function renderHistory() {
-                const history = JSON.parse(localStorage.getItem('g_search_hist') || '[]');
+                const history = JSON.parse(localStorage.getItem('g_search_hist_en') || '[]');
                 historyList.innerHTML = '';
                 if (history.length === 0) {
-                    historyList.innerHTML = '<span class="text-slate-400 italic text-[11px]">Kein Verlauf vorhanden</span>';
+                    historyList.innerHTML = '<span class="text-slateSubtle italic text-[11px]">No history saved</span>';
                     return;
                 }
                 history.forEach(item => {
                     const btn = document.createElement('button');
-                    btn.className = 'px-2 py-0.5 bg-purple-100 hover:bg-purple-200 text-purple-800 rounded text-[11px] font-mono border border-purple-200 transition';
+                    btn.className = 'px-2 py-0.5 bg-lavenderMuted hover:bg-lavenderBorder text-slateViolet rounded text-[11px] font-mono border border-lavenderBorder transition';
                     btn.textContent = item;
                     btn.onclick = () => {
                         const val = keywordInput.value.trim();
@@ -623,7 +740,7 @@ seo tipps 2026</textarea>
             }
 
             clearHistoryBtn.addEventListener('click', () => {
-                localStorage.removeItem('g_search_hist');
+                localStorage.removeItem('g_search_hist_en');
                 renderHistory();
             });
 
